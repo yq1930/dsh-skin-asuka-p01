@@ -1,6 +1,6 @@
 明日香 · P01 经典赛璐璐皮肤
 包名：dsh-skin-asuka-p01
-版本：0.2.0
+版本：0.3.0
 
 一、代码许可
 
@@ -16,7 +16,10 @@ React、Cordis、Harness 接口及其他第三方依赖保留各自的许可证�
 
 源码中的对应文件：
 - assets/source/p01-sheet.png：P01 人物方案依据。
-- assets/source/asuka-front.png：同一 P01 人物的全身派生素材。
+- assets/source/asuka-front.png：原P01收手站姿，会话中作为主立绘。
+- assets/source/asuka-welcome.png：以P01为参考生成的迎接全身立绘。
+- assets/source/asuka-study.png：以P01为参考生成的阅读全身立绘。
+- assets/source/ribbon-crest.png：本轮生成的酒红宝石缎带装饰。
 - assets/source/asuka-portrait.png：同一 P01 人物的头像派生素材。
 - assets/source/park-day.png：公园日景背景。
 - assets/source/park-dusk.png：公园暮色背景。
@@ -40,3 +43,5 @@ DeepSeek、DeepSeek Harness 或其他第三方项目的官方背书。
 本项目参考 Harness 的公开插件、主题、插槽和设置接口实现接入。
 skin.json 仅用于可选皮肤管理器的发现元数据，不表示其作者或管理器
 项目为本包提供授权、背书或完整兼容保证。本包不含自定义管理器配置桥。
+
+本轮三张新增PNG使用Codex内置image_gen生成；源码ornaments.ts中的金饰SVG为本项目原创界面图形。

@@ -6,5 +6,10 @@ declare module 'asuka:art' {
     day: string
     night: string
     frontAspect: number
+    welcome: string
+    study: string
+    welcomeAspect: number
+    studyAspect: number
+    ribbon: string
   }
 }

@@ -151,58 +151,53 @@ body[data-dsh-asuka-p01] .asuka-stage__character {
   object-position: center bottom;
 }
 
+body[data-dsh-asuka-p01] .asuka-stage__companion {
+  position: absolute;
+  display: block;
+  left: var(--asuka-companion-left, 0px);
+  bottom: var(--asuka-companion-bottom, 0px);
+  width: var(--asuka-companion-width, 0px);
+  height: var(--asuka-companion-height, 0px);
+  max-width: none;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage:not([data-companion-visible='true']) .asuka-stage__companion {
+  display: none;
+}
+
+/* A complete proscenium, drawn inside the conversation column under live UI. */
 body[data-dsh-asuka-p01] .asuka-stage__frame {
   position: absolute;
-  inset: 8px;
-  border: 1px solid var(--asuka-copper);
-  opacity: 0.6;
+  inset: 6px;
+  border: 1px solid #d3b67b;
+  border-radius: 6px;
+  background:
+    var(--asuka-corner-tl-art) left top / 94px 94px no-repeat,
+    var(--asuka-corner-tr-art) right top / 94px 94px no-repeat,
+    var(--asuka-corner-bl-art) left bottom / 94px 94px no-repeat,
+    var(--asuka-corner-br-art) right bottom / 94px 94px no-repeat,
+    var(--asuka-trim-art) left 27px / 100px 24px repeat-x,
+    linear-gradient(180deg, #271019, #5b1d2b 45%, #32131e) top / 100% 28px no-repeat,
+    linear-gradient(90deg, #b48547, #f3dfab 45%, #9c6b34) bottom / 100% 5px no-repeat;
 }
 
 body[data-dsh-asuka-p01] .asuka-stage__frame::before {
   content: '';
   position: absolute;
-  inset: 4px;
-  border: 1px solid color-mix(in srgb, var(--asuka-copper) 45%, transparent);
-  background:
-    linear-gradient(var(--asuka-ruby), var(--asuka-ruby)) left top / 32px 3px no-repeat,
-    linear-gradient(var(--asuka-ruby), var(--asuka-ruby)) right bottom / 32px 3px no-repeat;
+  inset: 5px;
+  border: 1px solid rgb(223 191 129 / 58%);
+  border-radius: 3px;
 }
 
-body[data-dsh-asuka-p01] .asuka-stage__portrait {
-  display: none;
+body[data-dsh-asuka-p01] .asuka-stage__frame::after {
+  content: '';
   position: absolute;
-  left: var(--asuka-portrait-left);
-  top: var(--asuka-portrait-top);
-  width: var(--asuka-portrait-size);
-  color: var(--asuka-chrome-text);
-  text-align: center;
-}
-
-body[data-dsh-asuka-p01] .asuka-stage[data-phase='hero'][data-portrait-visible='true'] .asuka-stage__portrait {
-  display: block;
-}
-
-body[data-dsh-asuka-p01] .asuka-stage__portrait img {
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: contain;
-  border: 1px solid var(--asuka-copper);
-  border-radius: 50%;
-  padding: 12px;
-  background: color-mix(in srgb, var(--asuka-panel) 86%, transparent);
-  box-shadow: 0 0 0 5px color-mix(in srgb, var(--asuka-copper) 20%, transparent);
-}
-
-body[data-dsh-asuka-p01] .asuka-stage__portrait span {
-  display: inline-block;
-  margin-top: 16px;
-  padding: 6px 13px;
-  border: 1px solid var(--asuka-copper);
-  background: var(--asuka-chrome);
-  font: 600 11px/1.2 ui-monospace, Menlo, monospace;
-  letter-spacing: 0.15em;
+  inset: -6px 0 -6px;
+  background:
+    var(--asuka-ribbon-art) center top / 130px 48px no-repeat,
+    var(--asuka-flourish-art) center bottom / 190px 46px no-repeat;
 }
 
 body[data-dsh-asuka-p01] .asuka-stage__mark {
@@ -315,6 +310,12 @@ body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
 body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-seat] {
   background: var(--asuka-base);
   border-top: 1px solid var(--asuka-border);
+}
+
+/* Reserve the crest's strip next to its card, after any native queue, goal,
+   task or notice content. Seat-level padding would leave those rows exposed. */
+body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-card] {
+  margin-top: 52px;
 }
 
 /* Wide tables normally break out into the full conversation width. Keep their
@@ -498,9 +499,9 @@ body[data-dsh-asuka-p01] .asuka-settings__preview-tabs button[aria-pressed='true
 body[data-dsh-asuka-p01] .asuka-settings__preview-reading {
   position: absolute;
   top: 18%;
-  right: 7%;
+  right: 26%;
   bottom: 18%;
-  left: 44%;
+  left: 26%;
   padding: 12px;
   border: 1px solid var(--asuka-border);
   border-radius: 6px;
@@ -510,8 +511,8 @@ body[data-dsh-asuka-p01] .asuka-settings__preview-reading {
 }
 
 body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-side='right'] .asuka-settings__preview-reading {
-  right: 44%;
-  left: 7%;
+  right: 26%;
+  left: 26%;
 }
 
 body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-mode='focus'] .asuka-settings__preview-reading {
@@ -669,7 +670,7 @@ body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[d
   }
 
   /* Extra safeguard while the client recalculates a narrow conversation's free rectangle. */
-  body[data-dsh-asuka-p01] .asuka-stage[data-phase='active'] .asuka-stage__character,
+  body[data-dsh-asuka-p01] .asuka-stage[data-phase='active'] :is(.asuka-stage__character, .asuka-stage__companion),
   body[data-dsh-asuka-p01] .asuka-stage__mark {
     display: none;
   }
@@ -721,4 +722,60 @@ body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[d
 
 body[data-dsh-asuka-p01] :is(.asuka-stage, .asuka-stage__character, .asuka-settings, .asuka-settings__notice, .asuka-settings__status)[hidden] {
   display: none;
+}
+
+/* Welcome typography sits between two complete figures rather than inside a
+   small app-like title chip. Text retains an opaque plate under its strokes. */
+body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage)
+  [class*='headline']:has(> [class*='fish']) {
+  position: relative;
+  flex-direction: column;
+  padding: 0;
+  gap: 12px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-dsh-asuka-p01] .asuka-hero-emblem {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  color: #ffe9b5;
+  background: var(--asuka-medallion-art) center / contain no-repeat;
+  font: 600 22px/1 Georgia, serif;
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 2px #361018;
+}
+
+body[data-dsh-asuka-p01] .asuka-hero-emblem > span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 55px;
+  border: 1px solid #dfbd7b;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #8e2f43, #35101d);
+}
+
+body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] {
+  padding: 10px 24px;
+  border-block: 1px solid var(--asuka-copper);
+  background: var(--asuka-panel);
+  box-shadow: 28px 0 25px -25px var(--asuka-panel), -28px 0 25px -25px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+  min-height: 170px;
+  justify-content: space-between;
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] .asuka-hero-emblem {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    text-shadow: none;
+  }
 }

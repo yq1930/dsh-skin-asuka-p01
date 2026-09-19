@@ -8,6 +8,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { artwork } from 'asuka:art'
 import css from './theme.css'
 import chromeCss from './chrome.css'
+import { ornamentCssVariables } from './ornaments.ts'
 import { createSettingsPage } from './settings.tsx'
 import { installScene } from './scene.ts'
 import { SETTINGS_NAMESPACE, decodePreferences, type AsukaPreferences } from '../preferences.ts'
@@ -38,7 +39,7 @@ export function apply(ctx: Context): void {
     const style = document.createElement('style')
     style.dataset.plugin = PACKAGE_NAME
     style.dataset.pluginCss = `${PACKAGE_NAME}/theme.css`
-    style.textContent = `${css}\n${chromeCss}\nbody[data-dsh-asuka-p01]{--asuka-portrait-art:url("${artwork.portrait}");}`
+    style.textContent = `${css}\n${chromeCss}\nbody[data-dsh-asuka-p01]{${ornamentCssVariables}--asuka-portrait-art:url("${artwork.portrait}");--asuka-ribbon-art:url("${artwork.ribbon}");}`
     document.head.append(style)
     return () => style.remove()
   }, 'asuka-p01: scoped styles')
@@ -58,7 +59,10 @@ export function apply(ctx: Context): void {
       ? <img className={`asuka-brand-image ${className ?? ''}`} src={artwork.portrait} alt="明日香 P01" width={size} height={size} draggable={false} />
       : <span className={`asuka-brand-number ${className ?? ''}`} style={{ width: size, height: size, fontSize: Math.max(12, size * 0.58) }} aria-label="明日香 P01">02</span>
   }
+  function HeroMark() {
+    return <span className="asuka-hero-emblem" role="img" aria-label="明日香 P01"><span>02</span></span>
+  }
   ctx.slots.inject('sidebar.brand.mark', () => ctx.slots.register({ name: 'sidebar.brand.mark', priority: -20 }, Mark))
-  ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -20 }, Mark))
+  ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -20 }, HeroMark))
   ctx.slots.inject('settings.section', () => ctx.slots.register({ name: 'settings.section', id: 'asuka-p01', label: '明日香 P01', order: 90 }, createSettingsPage(scope)))
 }

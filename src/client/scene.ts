@@ -39,6 +39,7 @@ export function installScene() {
   stage.dataset.skinOwner = 'asuka-p01'
   stage.dataset.phase = 'unknown'
   stage.dataset.artVisible = 'false'
+  stage.dataset.companionVisible = 'false'
   stage.setAttribute('aria-hidden', 'true')
   stage.style.setProperty('--asuka-scene-day', `url("${artwork.day}")`)
   stage.style.setProperty('--asuka-scene-night', `url("${artwork.night}")`)
@@ -50,27 +51,23 @@ export function installScene() {
   character.className = 'asuka-stage__character'
   character.alt = ''
   character.draggable = false
-  character.src = artwork.front
-  const portrait = document.createElement('div')
-  portrait.className = 'asuka-stage__portrait'
-  const face = document.createElement('img')
-  face.src = artwork.portrait
-  face.alt = ''
-  face.draggable = false
-  const caption = document.createElement('span')
-  caption.textContent = 'ASUKA / 02'
-  portrait.append(face, caption)
+  const companion = document.createElement('img')
+  companion.className = 'asuka-stage__companion'
+  companion.alt = ''
+  companion.draggable = false
   const mark = document.createElement('span')
   mark.className = 'asuka-stage__mark'
   mark.textContent = 'ASUKA / 02'
-  stage.append(background, frameArt, character, portrait, mark)
+  stage.append(background, frameArt, character, companion, mark)
   let prefs: AsukaPreferences | undefined
   let column: HTMLElement | null = null
   let columnAttributes: ReturnType<typeof attributes> | undefined
   const resizeTargets = new Set<HTMLElement>()
   let stopped = false
   let frame = 0
-  let failedImage = false
+  let characterLoaded = false
+  let characterSource = artwork.welcome
+  let companionLoaded = false
 
   const setSize = (name: string, value: number) => {
     const next = `${Math.round(value)}px`
@@ -91,7 +88,9 @@ export function installScene() {
         column.prepend(stage)
       } else stage.remove()
     } else if (column && stage.parentElement !== column) column.prepend(stage)
-    if (!column) { stage.dataset.artVisible = 'false'; return }
+    stage.dataset.artVisible = 'false'
+    stage.dataset.companionVisible = 'false'
+    if (!column) return
     const bounds = column.getBoundingClientRect()
     columnAttributes?.set('data-asuka-density', bounds.width >= 1100 ? 'normal' : bounds.width >= 850 ? 'compact' : 'narrow')
     const host = [...column.querySelectorAll<HTMLElement>(PHASE)].find(el => el !== stage && !stage.contains(el))
@@ -112,9 +111,16 @@ export function installScene() {
     }
     const phase = host?.dataset.phase
     stage.dataset.phase = phase === 'hero' ? 'hero' : phase === 'active' || phase === 'settling' ? 'active' : 'unknown'
-    stage.dataset.artVisible = 'false'
-    stage.dataset.portraitVisible = 'false'
-    if (!prefs || prefs.presentation === 'focus' || !host || failedImage) return
+    // Reading uses the narrower resting pose; welcome keeps its open gesture.
+    // Change the source only when the phase actually selects a different image.
+    const reading = phase === 'active' || phase === 'settling'
+    const nextCharacterSource = reading ? artwork.front : artwork.welcome
+    if (host && nextCharacterSource !== characterSource) {
+      characterLoaded = false
+      characterSource = nextCharacterSource
+      character.src = characterSource
+    }
+    if (!prefs || prefs.presentation === 'focus' || !host) return
     const content = elements
       .map(el => el.getBoundingClientRect())
       .filter(r => r.width > 40 && r.height > 0 && r.right > bounds.left && r.left < bounds.right)
@@ -122,45 +128,76 @@ export function installScene() {
     if (!content.length || bounds.width < 700 || bounds.height < 380) return
     const leftEdge = Math.max(bounds.left, Math.min(...content.map(r => r.left)))
     const rightEdge = Math.min(bounds.right, Math.max(...content.map(r => r.right)))
-    // The welcome illustration can extend behind its opaque input card. Active
-    // reading always uses the strict side-lane geometry below.
+    const opposite = prefs.side === 'left' ? 'right' : 'left'
+    const figures = [
+      { prefix: 'art', side: prefs.side, aspect: reading ? artwork.frontAspect : artwork.welcomeAspect, loaded: characterLoaded,
+        visible: 'artVisible', heroHeight: 0.86 },
+      { prefix: 'companion', side: opposite, aspect: artwork.studyAspect, loaded: companionLoaded,
+        visible: 'companionVisible', heroHeight: 0.82 },
+    ] as const
+    const place = (figure: typeof figures[number], height: number, bottom: number, inset: number) => {
+      const width = height * figure.aspect
+      setSize(`--asuka-${figure.prefix}-left`, figure.side === 'left' ? inset : bounds.width - width - inset)
+      setSize(`--asuka-${figure.prefix}-width`, width)
+      setSize(`--asuka-${figure.prefix}-height`, height)
+      setSize(`--asuka-${figure.prefix}-bottom`, bottom)
+      stage.dataset[figure.visible] = 'true'
+    }
+    // These are two distinct poses, never a mirrored copy. The welcome figures
+    // may extend behind the opaque input card, but leave the top frame clear.
     if (phase === 'hero' && bounds.width >= 1000 && bounds.height >= 600) {
-      const height = Math.min(bounds.height * 0.86, 860 * prefs.artScale / 100)
-      const width = Math.min(bounds.width * 0.28, height * artwork.frontAspect)
-      setSize('--asuka-art-left', prefs.side === 'left' ? 20 : bounds.width - width - 20)
-      setSize('--asuka-art-width', width)
-      setSize('--asuka-art-height', height)
-      setSize('--asuka-art-bottom', 20)
-      const oppositeSpace = prefs.side === 'left' ? bounds.right - rightEdge : leftEdge - bounds.left
-      const portraitSize = Math.min(220, oppositeSpace - 44)
-      if (portraitSize >= 140) {
-        setSize('--asuka-portrait-left', prefs.side === 'left' ? bounds.width - portraitSize - 24 : 24)
-        setSize('--asuka-portrait-top', Math.max(70, bounds.height * 0.12))
-        setSize('--asuka-portrait-size', portraitSize)
-        stage.dataset.portraitVisible = 'true'
+      for (const figure of figures) {
+        if (!figure.loaded) continue
+        const height = Math.min(
+          bounds.height * figure.heroHeight * prefs.artScale / 100,
+          bounds.height - 90,
+          bounds.width * 0.34 / figure.aspect,
+        )
+        place(figure, height, 20, 20)
       }
-      stage.dataset.artVisible = 'true'
       return
     }
-    const space = prefs.side === 'left' ? leftEdge - bounds.left : bounds.right - rightEdge
-    const lane = space - 36
-    if (lane < 100) return
-    // Active input/metadata now share an opaque seat. Keep the feet above its
-    // visible top, even when the input card itself is lower or grows taller.
+    // Active input/metadata share an opaque seat. Keep both figures' feet above
+    // its visible top, even when the input card itself is lower or grows taller.
     const composerSurfaces = [...host.querySelectorAll<HTMLElement>('[data-composer-card], [data-composer-seat]')]
       .map(el => el.getBoundingClientRect())
       .filter(r => r.width > 0 && r.height > 0 && r.bottom > bounds.top && r.top < bounds.bottom)
     const bottom = phase !== 'hero' && composerSurfaces.length
-      ? Math.max(0, bounds.bottom - Math.min(...composerSurfaces.map(r => r.top)) + 16) : 0
-    const availableHeight = bounds.height - bottom - 28
+      ? Math.max(0, bounds.bottom - Math.min(...composerSurfaces.map(r => r.top)) + 16) : 20
+    const availableHeight = bounds.height - bottom - 70
     if (availableHeight < 220) return
-    const width = Math.min(lane, 270 * prefs.artScale / 100)
-    const height = Math.min(availableHeight, width / artwork.frontAspect, bounds.height * (phase === 'hero' ? 0.86 : 0.76))
-    setSize('--asuka-art-left', prefs.side === 'left' ? 16 : bounds.width - width - 16)
-    setSize('--asuka-art-width', width)
-    setSize('--asuka-art-height', height)
-    setSize('--asuka-art-bottom', bottom)
-    stage.dataset.artVisible = 'true'
+    let candidates: { figure: typeof figures[number]; height: number }[] = []
+    for (const figure of figures) {
+      if (!figure.loaded) continue
+      const space = figure.side === 'left' ? leftEdge - bounds.left : bounds.right - rightEdge
+      // Keep at least sixteen pixels clear, with four extra pixels for
+      // fractional layout coordinates and image-size rounding.
+      const lane = space - 36
+      if (lane < 100) continue
+      const height = Math.min(
+        availableHeight,
+        Math.min(lane, 270 * prefs.artScale / 100) / figure.aspect,
+        bounds.height * (phase === 'hero' ? figure.heroHeight : 0.76),
+      )
+      // A height-constrained narrow figure is independently hidden, without
+      // suppressing the other pose when its lane can still accommodate it.
+      if (height * figure.aspect < 100) continue
+      candidates.push({ figure, height })
+    }
+    let sharedHeight: number | undefined
+    if (reading && candidates.length === 2) {
+      const lowerHeight = Math.min(...candidates.map(candidate => candidate.height))
+      if (candidates.every(({ figure }) => lowerHeight * figure.aspect >= 100)) {
+        sharedHeight = lowerHeight
+      } else {
+        // If equalizing would make one pose illegibly narrow, keep only the
+        // other pose and preserve that single figure's own available height.
+        candidates = candidates.filter(({ figure }) => lowerHeight * figure.aspect >= 100)
+      }
+    }
+    for (const { figure, height } of candidates) {
+      place(figure, sharedHeight ?? height, bottom, 16)
+    }
   }
   const schedule = () => {
     if (!stopped && !frame) frame = requestAnimationFrame(refresh)
@@ -172,10 +209,20 @@ export function installScene() {
   mutations.observe(document.body, { subtree: true, childList: true, attributes: true,
     attributeFilter: ['data-phase', 'data-content-phase', 'class', 'style'] })
   window.addEventListener('resize', schedule)
-  const onLoad = () => { failedImage = false; schedule() }
-  const onError = () => { failedImage = true; stage.dataset.artVisible = 'false' }
-  character.addEventListener('load', onLoad)
-  character.addEventListener('error', onError)
+  const onCharacterLoad = () => {
+    if (character.currentSrc !== characterSource || character.naturalWidth === 0) return
+    characterLoaded = true
+    schedule()
+  }
+  const onCharacterError = () => { characterLoaded = false; stage.dataset.artVisible = 'false'; schedule() }
+  const onCompanionLoad = () => { companionLoaded = true; schedule() }
+  const onCompanionError = () => { companionLoaded = false; stage.dataset.companionVisible = 'false'; schedule() }
+  character.addEventListener('load', onCharacterLoad)
+  character.addEventListener('error', onCharacterError)
+  companion.addEventListener('load', onCompanionLoad)
+  companion.addEventListener('error', onCompanionError)
+  character.src = characterSource
+  companion.src = artwork.study
   schedule()
   return {
     update(value: AsukaPreferences | undefined) {
@@ -195,8 +242,10 @@ export function installScene() {
       resizeTargets.clear()
       columnAttributes?.dispose()
       window.removeEventListener('resize', schedule)
-      character.removeEventListener('load', onLoad)
-      character.removeEventListener('error', onError)
+      character.removeEventListener('load', onCharacterLoad)
+      character.removeEventListener('error', onCharacterError)
+      companion.removeEventListener('load', onCompanionLoad)
+      companion.removeEventListener('error', onCompanionError)
       stage.remove()
       body.dispose()
     },

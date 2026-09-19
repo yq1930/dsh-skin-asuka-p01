@@ -1,5 +1,12 @@
-/* P01 chrome: copper seams, a red field and the pilot's 02 insignia.
-   Decoration never changes the host's column geometry or overlay tier. */
+/* P01 salon: wine velvet, engraved champagne gold and ruby ribbon clasps.
+   Artwork decorates existing host surfaces; it never owns an overlay tier. */
+body[data-dsh-asuka-p01] {
+  --asuka-gold-light: #f4daa4;
+  --asuka-gold-shadow: #9a6b3c;
+  --asuka-velvet-glow: #592433;
+  --asuka-ivory-button: #fff5e4;
+  --asuka-ivory-button-ink: #512733;
+}
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
 body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
 body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
@@ -56,40 +63,59 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'], [data
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) {
-  box-shadow: inset -1px 0 var(--asuka-copper), inset -4px 0 var(--asuka-chrome-raised);
+  box-shadow: inset -1px 0 var(--asuka-gold-light), inset -4px 0 var(--asuka-chrome-raised), inset -6px 0 var(--asuka-gold-shadow);
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow']) {
   position: relative;
   background-color: var(--asuka-chrome);
-  box-shadow: inset 5px 0 var(--asuka-chrome), inset 6px 0 color-mix(in srgb, var(--asuka-copper) 36%, transparent);
+  background-image:
+    radial-gradient(ellipse at 35% 0, var(--asuka-velvet-glow), transparent 65%),
+    repeating-linear-gradient(92deg, #fff4d501 0 1px, transparent 1px 4px);
+  box-shadow: inset 5px 0 var(--asuka-chrome), inset 6px 0 color-mix(in srgb, var(--asuka-copper) 48%, transparent);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) {
+  padding-top: 20px;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before {
   content: '';
   position: absolute;
-  inset: 8px;
-  border: 1px solid color-mix(in srgb, var(--asuka-copper) 62%, transparent);
-  border-radius: 8px;
+  inset: 5px 7px 7px 5px;
+  border: 1px solid var(--asuka-copper);
+  border-radius: 13px;
+  background:
+    var(--asuka-corner-tl-art, none) left top / 72px 72px no-repeat,
+    var(--asuka-corner-tr-art, none) right top / 72px 72px no-repeat,
+    var(--asuka-corner-bl-art, none) left bottom / 72px 72px no-repeat,
+    var(--asuka-corner-br-art, none) right bottom / 72px 72px no-repeat;
+  box-shadow: inset 0 0 0 3px var(--asuka-chrome), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 30%, transparent);
   pointer-events: none;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
   content: '';
   position: absolute;
-  right: 12px;
-  bottom: 112px;
-  width: min(60%, 164px);
-  aspect-ratio: 1;
-  background: var(--asuka-portrait-art, none) center / contain no-repeat;
-  opacity: 0.065;
+  left: max(12.5%, calc(50% - 109px));
+  bottom: 88px;
+  width: min(75%, 218px);
+  aspect-ratio: 220 / 244;
+  background:
+    var(--asuka-medallion-art, none) center / 100% 100% no-repeat,
+    var(--asuka-portrait-art, none) center 40% / 58% auto no-repeat;
+  opacity: 0.18;
   pointer-events: none;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
   div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='logoRow'] {
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 65%, transparent), inset 0 0 0 4px var(--asuka-chrome-raised);
+  position: relative;
+  border-radius: 12px 12px 7px 7px;
+  background:
+    var(--asuka-plaque-art, none) center / 100% 100% no-repeat,
+    linear-gradient(115deg, var(--asuka-chrome-raised), var(--asuka-chrome) 60%, var(--asuka-velvet-glow));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 60%, transparent), 0 2px 5px #10060b40;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) [class*='logoRow'] [class*='brand'] > svg {
@@ -97,39 +123,73 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) [clas
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) button[class*='newSession'] {
-  color: var(--asuka-chrome-text);
-  background: var(--asuka-ruby);
+  position: relative;
+  color: var(--asuka-ivory-button-ink);
+  background:
+    var(--asuka-plaque-art, none) center / 100% 100% no-repeat,
+    linear-gradient(180deg, #fffdf4, var(--asuka-ivory-button) 60%, #eddbbd);
   border-color: var(--asuka-copper);
-  box-shadow: inset 0 0 0 3px var(--asuka-ruby), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 55%, transparent);
+  border-radius: 17px 11px;
+  box-shadow: inset 0 0 0 2px #fffaf0, inset 0 0 0 3px var(--asuka-copper), 0 2px 6px #10060b30;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) button[class*='newSession']:hover {
+  color: var(--asuka-ivory-button-ink);
+  background-color: #fff9eb;
+  box-shadow: inset 0 0 0 2px #fffaf0, inset 0 0 0 3px var(--asuka-gold-light), 0 0 0 1px var(--asuka-gold-light), 0 2px 8px #10060b40;
 }
 
 body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button:has(> [data-slot='settings.trigger']) {
+  position: relative;
   color: var(--asuka-chrome-text);
-  background-color: var(--asuka-chrome-raised);
-  border-radius: 8px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 65%, transparent);
+  background:
+    var(--asuka-plaque-art, none) center / 100% 100% no-repeat,
+    linear-gradient(180deg, var(--asuka-chrome-raised), var(--asuka-chrome));
+  border-radius: 8px 8px 12px 12px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 80%, transparent);
+  min-height: 40px;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='footArea'] {
+  padding-top: 27px;
+  background: var(--asuka-flourish-art, none) center top / min(100%, 230px) 38px no-repeat;
 }
 
 body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow'] {
-  border-radius: 5px;
-  box-shadow: inset 0 -1px color-mix(in srgb, var(--asuka-copper) 20%, transparent);
+  position: relative;
+  border-radius: 4px;
+  box-shadow: inset 0 -1px color-mix(in srgb, var(--asuka-copper) 27%, transparent);
 }
 
 body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow']:has(> [class*='folderActive']) {
   color: var(--asuka-chrome-text);
-  background-color: var(--asuka-chrome-raised);
-  box-shadow: inset 3px 0 var(--asuka-ruby), inset 0 0 0 1px var(--asuka-copper);
+  background:
+    linear-gradient(180deg, #fff3c21c, transparent 24%, #15050e24 82%, #fff3c21c),
+    linear-gradient(100deg, var(--asuka-velvet-glow), var(--asuka-ruby) 47%, var(--asuka-chrome-raised));
+  box-shadow: inset 0 0 0 1px var(--asuka-copper), inset 0 0 0 3px #8c495530, 0 3px 4px #10060b30;
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow']:has(> [class*='folderActive'])::before {
+  content: '';
+  position: absolute;
+  inset: 3px 3px 3px auto;
+  width: 12px;
+  border-block: 1px solid var(--asuka-gold-light);
+  background: linear-gradient(135deg, transparent 44%, var(--asuka-gold-light) 46% 50%, transparent 52%) top right / 12px 50% no-repeat,
+    linear-gradient(45deg, transparent 44%, var(--asuka-gold-light) 46% 50%, transparent 52%) bottom right / 12px 50% no-repeat;
+  opacity: 0.65;
+  pointer-events: none;
 }
 
 body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='folderActive'] {
-  color: var(--asuka-copper);
+  color: var(--asuka-gold-light);
 }
 
 body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [role='treeitem'][aria-selected='true'],
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) [class*='panelRow'][aria-current='page'] {
   color: var(--asuka-chrome-text);
-  background-color: var(--asuka-ruby);
-  box-shadow: inset 3px 0 var(--asuka-copper), inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 50%, transparent);
+  background: linear-gradient(100deg, var(--asuka-chrome-raised), var(--asuka-velvet-glow));
+  box-shadow: inset 3px 0 var(--asuka-gold-light), inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 75%, transparent);
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
@@ -148,17 +208,26 @@ body[data-dsh-asuka-p01][data-asuka-mode='focus'] :is([data-pane='sidebar'], [cl
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow']) {
   box-shadow: none;
+  background-image: none;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow']) button[class*='newSession'] {
+  color: var(--asuka-chrome-text);
+  background: var(--asuka-chrome-raised);
+  border-radius: 10px;
   box-shadow: inset 0 0 0 1px var(--asuka-copper);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow']) [data-slot='sidebar.settings'] button {
+  background-image: none;
+  min-height: 0;
 }
 
 /* Color only the conversation's owning header; retain its native stacking. */
 body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
 body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
-  background: var(--asuka-chrome);
-  box-shadow: inset 0 -1px var(--asuka-copper), inset 0 -4px var(--asuka-chrome-raised);
+  background: radial-gradient(ellipse at 25% 0, var(--asuka-velvet-glow), transparent 70%), var(--asuka-chrome);
+  box-shadow: inset 0 -1px var(--asuka-gold-light), inset 0 -4px var(--asuka-chrome-raised), inset 0 -5px var(--asuka-copper);
 }
 
 body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [role='tab'][aria-selected='true'] {
@@ -169,28 +238,33 @@ body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [rol
   background-color: var(--asuka-copper);
 }
 
-/* Two inset seams leave the text box, scroll height and overlay anchor intact.
-   ::after belongs to the host's no-workspace dashed affordance. */
+/* The crest sits above the text field in a reserved strip. ::after remains the
+   host's no-workspace affordance; no icon, hit target or text is repainted. */
 body[data-dsh-asuka-p01] [data-composer-card] {
-  box-shadow: 0 0 0 1px var(--asuka-copper), inset 0 0 0 3px var(--asuka-panel), inset 0 0 0 4px color-mix(in srgb, var(--asuka-ruby) 54%, transparent), 0 8px 22px #23171c14;
+  border-radius: 24px;
+  border-color: var(--asuka-copper);
+  padding-top: 26px;
+  background-image: var(--asuka-trim-art, none);
+  background-position: left 10px top 5px;
+  background-size: 72px 20px;
+  background-repeat: repeat-x;
+  box-shadow: 0 0 0 1px var(--asuka-gold-light), 0 0 0 3px var(--asuka-copper), 0 0 0 5px color-mix(in srgb, var(--asuka-panel) 72%, transparent), inset 0 0 0 3px var(--asuka-panel), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 72%, transparent), 0 8px 22px #23171c26;
 }
 
 body[data-dsh-asuka-p01] [data-composer-card]::before {
-  content: '02';
+  content: '';
   position: absolute;
-  top: -10px;
-  left: calc(50% - 19px);
+  top: -52px;
+  left: calc(50% - 90px);
   box-sizing: border-box;
-  width: 38px;
-  height: 20px;
-  border: 1px solid var(--asuka-copper);
-  border-radius: 3px;
-  background: var(--asuka-ruby);
-  color: var(--asuka-chrome-text);
-  font: 700 11px/18px ui-monospace, 'SF Mono', Menlo, monospace;
-  letter-spacing: 0.12em;
-  text-align: center;
+  width: 180px;
+  height: 56px;
+  background: var(--asuka-ribbon-art, var(--asuka-flourish-art, none)) center / contain no-repeat;
   pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+  margin-top: 46px;
 }
 
 body[data-dsh-asuka-p01] [data-composer-card]:focus-within {
@@ -199,9 +273,25 @@ body[data-dsh-asuka-p01] [data-composer-card]:focus-within {
 }
 
 body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'] {
-  padding-block: 12px;
-  border-block: 1px solid color-mix(in srgb, var(--asuka-copper) 58%, transparent);
+  position: relative;
+  padding: 16px 22px;
+  border-block: 1px solid color-mix(in srgb, var(--asuka-copper) 72%, transparent);
+  background-image: var(--asuka-plaque-art, none);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
   text-shadow: 0 1px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline']::before {
+  content: '';
+  position: absolute;
+  left: calc(50% - 140px);
+  top: -37px;
+  width: 280px;
+  height: 46px;
+  background: var(--asuka-flourish-art, none) center / contain no-repeat;
+  pointer-events: none;
 }
 
 body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] > span:first-child {
@@ -218,15 +308,59 @@ body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewB
   border-color: var(--asuka-border);
 }
 
+@media (max-width: 1100px) {
+  body[data-dsh-asuka-p01] [data-composer-card]::before {
+    left: calc(50% - 74px);
+    top: -43px;
+    width: 148px;
+    height: 46px;
+  }
+
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+    margin-top: 38px;
+  }
+}
+
+/* A short window gives the navigation space back to its content. */
+@media (max-height: 700px) {
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-dsh-asuka-p01] [data-composer-card]::before,
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline']::before {
+    animation: none;
+    transition: none;
+  }
+}
+
 @media (forced-colors: active) {
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before,
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after,
-  body[data-dsh-asuka-p01] [data-composer-card]::before {
+  body[data-dsh-asuka-p01] [data-composer-card]::before,
+  body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow']::before,
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline']::before {
     display: none;
   }
 
   body[data-dsh-asuka-p01] [data-composer-card],
-  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) {
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) :is(div:has(> [class*='logoRow']), [class*='logoRow'], button[class*='newSession']),
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='footArea'],
+  body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button,
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'],
+  body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+    background-image: none;
     box-shadow: none;
+  }
+
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+    margin-top: 0;
+  }
+
+  body[data-dsh-asuka-p01] [data-composer-card] {
+    padding-top: 8px;
   }
 }

@@ -1,0 +1,481 @@
+/* P01 uses host color aliases; layout, typography and task-state colors remain host-owned. */
+body[data-dsh-asuka-p01] {
+  --asuka-base: #eae9df;
+  --asuka-panel: #f7f3ea;
+  --asuka-raised: #e8e9df;
+  --asuka-overlay: #fffdf7;
+  --asuka-code: #ecede3;
+  --asuka-text: #252c2d;
+  --asuka-secondary: #526850;
+  --asuka-muted: #637065;
+  --asuka-primary: #a9473b;
+  --asuka-primary-hover: #913d34;
+  --asuka-on-primary: #ffffff;
+  --asuka-link: #286685;
+  --asuka-border: #cbcdbf;
+  --asuka-control: #7a8c7d;
+  --asuka-selected: #f0ddd2;
+  --asuka-error: #b33535;
+  --asuka-notice: #895900;
+
+  --dsw-alias-bg-base: var(--asuka-base);
+  --dsw-alias-bg-layer-1: var(--asuka-panel);
+  --dsw-alias-bg-layer-2: var(--asuka-raised);
+  --dsw-alias-bg-layer-3: var(--asuka-overlay);
+  --dsw-alias-bg-overlay: var(--asuka-overlay);
+  --dsw-alias-bg-module-platform: var(--asuka-panel);
+  --dsw-alias-border-l1: var(--asuka-border);
+  --dsw-alias-border-l2-darkmode-thin: var(--asuka-border);
+  --dsw-alias-border-l2: var(--asuka-control);
+  --dsw-alias-border-l3: var(--asuka-control);
+  --dsw-alias-border-l4: var(--asuka-control);
+  --dsw-alias-brand-primary: var(--asuka-primary);
+  --dsw-alias-brand-text: var(--asuka-text);
+  --dsw-alias-button-elevated-fill: var(--asuka-panel);
+  --dsw-alias-button-floating-fill: var(--asuka-overlay);
+  --dsw-alias-button-floating-hover: var(--asuka-raised);
+  --dsw-alias-button-info-fill: var(--asuka-primary);
+  --dsw-alias-button-info-hover: var(--asuka-primary-hover);
+  --dsw-alias-interactive-bg-active: var(--asuka-selected);
+  --dsw-alias-interactive-bg-hover: var(--asuka-raised);
+  --dsw-alias-interactive-bg-hover-solid: var(--asuka-raised);
+  --dsw-alias-label-primary: var(--asuka-text);
+  --dsw-alias-label-primary-bluish: var(--asuka-link);
+  --dsw-alias-label-secondary: var(--asuka-secondary);
+  --dsw-alias-label-tertiary: var(--asuka-muted);
+  --dsw-alias-label-caption: var(--asuka-muted);
+  --dsw-alias-label-primary-dimmed: var(--asuka-secondary);
+  --dsw-alias-label-dimmed: var(--asuka-muted);
+  --dsw-alias-label-primary-foreground: var(--asuka-on-primary);
+  --dsw-alias-label-primary-inverted: var(--asuka-panel);
+  --dsw-alias-state-business-primary: var(--asuka-link);
+  --dsw-alias-state-business-tertiary: var(--asuka-raised);
+  --dsw-alias-markdown-code-block: var(--asuka-code);
+  --dsw-alias-scrollbar-bg-l2: var(--asuka-control);
+  --dsw-alias-scrollbar-hover-l2: var(--asuka-secondary);
+  --dsw-specific-input-major: var(--asuka-panel);
+  --dsw-specific-menu: var(--asuka-overlay);
+  --dsw-specific-selector: var(--asuka-raised);
+  --dsw-specific-sidebar-fill: var(--asuka-base);
+  --dsw-specific-sidebar-nav-item-active-accent: var(--asuka-primary);
+
+  color: var(--asuka-text);
+  background-color: var(--asuka-base);
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] {
+  --asuka-base: #1d2222;
+  --asuka-panel: #252c2d;
+  --asuka-raised: #303838;
+  --asuka-overlay: #3b4544;
+  --asuka-code: #202626;
+  --asuka-text: #f7f3ea;
+  --asuka-secondary: #cbd1c8;
+  --asuka-muted: #adb9b3;
+  --asuka-link: #9accdc;
+  --asuka-border: #4d5a53;
+  --asuka-control: #85988b;
+  --asuka-selected: #443330;
+  --asuka-error: #ffada8;
+  --asuka-notice: #f1c57a;
+}
+
+/* No isolation, transform or z-index on the host column/root: fixed dialogs retain their host tier. */
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol']) {
+  position: relative;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
+  :is([data-phase='hero'], [data-phase='active'], [data-phase='settling']):not(.asuka-stage) {
+  position: relative;
+  background-color: transparent;
+}
+
+/* The client inserts this first and calculates an unused rectangle for its character. */
+body[data-dsh-asuka-p01] .asuka-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage *,
+body[data-dsh-asuka-p01] .asuka-stage::before,
+body[data-dsh-asuka-p01] .asuka-stage::after {
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__background {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-image: var(--asuka-scene-day, none);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: clamp(0, var(--asuka-scene-opacity, 0.18), 1);
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-stage__background {
+  background-image: var(--asuka-scene-night, none);
+}
+
+body[data-dsh-asuka-p01][data-asuka-background='true'] .asuka-stage__background {
+  display: block;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__character {
+  position: absolute;
+  display: block;
+  left: var(--asuka-art-left, 0px);
+  bottom: var(--asuka-art-bottom, 0px);
+  width: var(--asuka-art-width, 0px);
+  height: var(--asuka-art-height, 0px);
+  max-width: none;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__mark {
+  display: none;
+  position: absolute;
+  left: calc(var(--asuka-art-left, 0px) + 12px);
+  bottom: 12px;
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  border: 1px solid var(--asuka-border);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font: 600 11px/1.2 ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.08em;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage[data-phase='hero'][data-art-visible='true'] .asuka-stage__mark {
+  display: block;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage:not([data-art-visible='true']) .asuka-stage__character,
+body[data-dsh-asuka-p01] .asuka-stage[data-phase='unknown'],
+body[data-dsh-asuka-p01][data-asuka-mode='focus'] .asuka-stage {
+  display: none;
+}
+
+/* Opaque reading/input surfaces do not change the host's widths, spacing or text size. */
+body[data-dsh-asuka-p01] :is([data-chat-flow], [data-composer-card], [data-composer-input]) {
+  background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] pre,
+body[data-dsh-asuka-p01] [data-terminal] {
+  background-color: var(--asuka-code);
+}
+
+/* Keep the native centered flex row and its height; the paint-only surround avoids moving the composer. */
+body[data-dsh-asuka-p01] [data-phase='hero'] [class*='headline']:has(> [class*='fish']) {
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+  border-radius: 8px;
+  background-color: var(--asuka-panel);
+  box-shadow: 0 0 0 6px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] :is([data-chat-flow], .asuka-settings) a[href] {
+  color: var(--asuka-link);
+  text-decoration-color: currentColor;
+}
+
+body[data-dsh-asuka-p01] .asuka-brand-image,
+body[data-dsh-asuka-p01] .asuka-brand-number {
+  display: block;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border-radius: 5px;
+}
+
+body[data-dsh-asuka-p01] .asuka-brand-image {
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+body[data-dsh-asuka-p01] .asuka-brand-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--asuka-primary);
+  color: var(--asuka-on-primary);
+  font: 700 14px/1 ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+/* This layout belongs only to the theme's settings section. */
+body[data-dsh-asuka-p01] .asuka-settings {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 980px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(240px, 1fr);
+  gap: 24px;
+  color: var(--asuka-text);
+  background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, select, input) {
+  box-sizing: border-box;
+  font: inherit;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header,
+body[data-dsh-asuka-p01] .asuka-settings__actions,
+body[data-dsh-asuka-p01] .asuka-settings__notice,
+body[data-dsh-asuka-p01] .asuka-settings__status {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header {
+  border-bottom: 1px solid var(--asuka-border);
+  padding-bottom: 18px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header :is(h1, h2, h3) {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header p {
+  margin: 0;
+  color: var(--asuka-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview {
+  display: block;
+  box-sizing: border-box;
+  align-self: start;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border: 1px solid var(--asuka-border);
+  border-radius: 10px;
+  background-color: var(--asuka-raised);
+  overflow: hidden;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-scene {
+  position: absolute;
+  inset: 0;
+  background: var(--asuka-preview-day) center / cover no-repeat;
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-settings__preview-scene {
+  background-image: var(--asuka-preview-night);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__controls {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 9px;
+  min-width: 0;
+  color: var(--asuka-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field :is(select, input:not([type='checkbox']):not([type='range'])) {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  color: var(--asuka-text);
+  background: var(--asuka-overlay);
+  color-scheme: light;
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-settings__field :is(select, input) {
+  color-scheme: dark;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field input[type='range'] {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  accent-color: var(--asuka-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex: 0 0 16px;
+  accent-color: var(--asuka-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field:has(> input[type='checkbox']) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field :is(small, output) {
+  color: var(--asuka-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid var(--asuka-border);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button {
+  min-height: 36px;
+  padding: 7px 14px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  background: var(--asuka-overlay);
+  color: var(--asuka-text);
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:hover:not(:disabled):not(.disabled):not([aria-disabled='true']) {
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:is(.primary, [data-variant='primary'], [type='submit']) {
+  border-color: var(--asuka-primary);
+  background: var(--asuka-primary);
+  color: var(--asuka-on-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:is(.primary, [data-variant='primary'], [type='submit']):hover:not(:disabled):not(.disabled):not([aria-disabled='true']) {
+  background: var(--asuka-primary-hover);
+  border-color: var(--asuka-primary-hover);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select, a):focus-visible {
+  outline: 2px solid var(--asuka-link);
+  outline-offset: 3px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select):is(:disabled, .disabled, [aria-disabled='true']) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status) {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--asuka-secondary);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__notice {
+  padding: 11px 13px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 6px;
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[data-state='error'] {
+  color: var(--asuka-error);
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[data-state='warning'] {
+  color: var(--asuka-notice);
+}
+
+@media (max-width: 1100px) {
+  body[data-dsh-asuka-p01] .asuka-settings {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px;
+    gap: 20px;
+  }
+
+  /* Extra safeguard while the client recalculates a narrow conversation's free rectangle. */
+  body[data-dsh-asuka-p01] .asuka-stage[data-phase='active'] .asuka-stage__character,
+  body[data-dsh-asuka-p01] .asuka-stage__mark {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-dsh-asuka-p01] .asuka-stage,
+  body[data-dsh-asuka-p01] .asuka-stage *,
+  body[data-dsh-asuka-p01] .asuka-settings,
+  body[data-dsh-asuka-p01] .asuka-settings * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01],
+  body[data-dsh-asuka-p01][data-ds-dark-theme] {
+    --asuka-base: Canvas;
+    --asuka-panel: Canvas;
+    --asuka-raised: Canvas;
+    --asuka-overlay: Canvas;
+    --asuka-code: Canvas;
+    --asuka-text: CanvasText;
+    --asuka-secondary: CanvasText;
+    --asuka-muted: GrayText;
+    --asuka-primary: Highlight;
+    --asuka-primary-hover: Highlight;
+    --asuka-on-primary: HighlightText;
+    --asuka-link: LinkText;
+    --asuka-border: ButtonBorder;
+    --asuka-control: ButtonBorder;
+    --asuka-selected: Canvas;
+    --asuka-error: CanvasText;
+    --asuka-notice: CanvasText;
+  }
+
+  body[data-dsh-asuka-p01] .asuka-stage {
+    display: none;
+  }
+
+  body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select):is(:disabled, .disabled, [aria-disabled='true']) {
+    color: GrayText;
+    border-color: GrayText;
+    opacity: 1;
+  }
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-stage, .asuka-stage__character, .asuka-settings, .asuka-settings__notice, .asuka-settings__status)[hidden] {
+  display: none;
+}

@@ -44,15 +44,26 @@ export function installScene() {
   stage.style.setProperty('--asuka-scene-night', `url("${artwork.night}")`)
   const background = document.createElement('div')
   background.className = 'asuka-stage__background'
+  const frameArt = document.createElement('div')
+  frameArt.className = 'asuka-stage__frame'
   const character = document.createElement('img')
   character.className = 'asuka-stage__character'
   character.alt = ''
   character.draggable = false
   character.src = artwork.front
+  const portrait = document.createElement('div')
+  portrait.className = 'asuka-stage__portrait'
+  const face = document.createElement('img')
+  face.src = artwork.portrait
+  face.alt = ''
+  face.draggable = false
+  const caption = document.createElement('span')
+  caption.textContent = 'ASUKA / 02'
+  portrait.append(face, caption)
   const mark = document.createElement('span')
   mark.className = 'asuka-stage__mark'
   mark.textContent = 'ASUKA / 02'
-  stage.append(background, character, mark)
+  stage.append(background, frameArt, character, portrait, mark)
   let prefs: AsukaPreferences | undefined
   let column: HTMLElement | null = null
   let columnAttributes: ReturnType<typeof attributes> | undefined
@@ -102,6 +113,7 @@ export function installScene() {
     const phase = host?.dataset.phase
     stage.dataset.phase = phase === 'hero' ? 'hero' : phase === 'active' || phase === 'settling' ? 'active' : 'unknown'
     stage.dataset.artVisible = 'false'
+    stage.dataset.portraitVisible = 'false'
     if (!prefs || prefs.presentation === 'focus' || !host || failedImage) return
     const content = elements
       .map(el => el.getBoundingClientRect())
@@ -110,6 +122,26 @@ export function installScene() {
     if (!content.length || bounds.width < 700 || bounds.height < 380) return
     const leftEdge = Math.max(bounds.left, Math.min(...content.map(r => r.left)))
     const rightEdge = Math.min(bounds.right, Math.max(...content.map(r => r.right)))
+    // The welcome illustration can extend behind its opaque input card. Active
+    // reading always uses the strict side-lane geometry below.
+    if (phase === 'hero' && bounds.width >= 1000 && bounds.height >= 600) {
+      const height = Math.min(bounds.height * 0.86, 860 * prefs.artScale / 100)
+      const width = Math.min(bounds.width * 0.28, height * artwork.frontAspect)
+      setSize('--asuka-art-left', prefs.side === 'left' ? 20 : bounds.width - width - 20)
+      setSize('--asuka-art-width', width)
+      setSize('--asuka-art-height', height)
+      setSize('--asuka-art-bottom', 20)
+      const oppositeSpace = prefs.side === 'left' ? bounds.right - rightEdge : leftEdge - bounds.left
+      const portraitSize = Math.min(220, oppositeSpace - 44)
+      if (portraitSize >= 140) {
+        setSize('--asuka-portrait-left', prefs.side === 'left' ? bounds.width - portraitSize - 24 : 24)
+        setSize('--asuka-portrait-top', Math.max(70, bounds.height * 0.12))
+        setSize('--asuka-portrait-size', portraitSize)
+        stage.dataset.portraitVisible = 'true'
+      }
+      stage.dataset.artVisible = 'true'
+      return
+    }
     const space = prefs.side === 'left' ? leftEdge - bounds.left : bounds.right - rightEdge
     const lane = space - 36
     if (lane < 100) return

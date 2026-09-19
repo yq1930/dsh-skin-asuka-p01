@@ -7,6 +7,7 @@ import type {} from '@deepseek-ai/dsh-client-ui-sidebar/client'
 import type {} from '@deepseek-ai/dsh-client-ui-conversation/client'
 import { artwork } from 'asuka:art'
 import css from './theme.css'
+import chromeCss from './chrome.css'
 import { createSettingsPage } from './settings.tsx'
 import { installScene } from './scene.ts'
 import { SETTINGS_NAMESPACE, decodePreferences, type AsukaPreferences } from '../preferences.ts'
@@ -37,7 +38,7 @@ export function apply(ctx: Context): void {
     const style = document.createElement('style')
     style.dataset.plugin = PACKAGE_NAME
     style.dataset.pluginCss = `${PACKAGE_NAME}/theme.css`
-    style.textContent = css
+    style.textContent = `${css}\n${chromeCss}\nbody[data-dsh-asuka-p01]{--asuka-portrait-art:url("${artwork.portrait}");}`
     document.head.append(style)
     return () => style.remove()
   }, 'asuka-p01: scoped styles')

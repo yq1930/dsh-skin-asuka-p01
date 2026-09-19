@@ -83,7 +83,7 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
     return <section className="asuka-settings" aria-label="明日香 P01 主题设置">
       <header className="asuka-settings__header">
         <h2>明日香 · P01经典赛璐璐</h2>
-        <p>米白、日常红与公园树荫。明暗外观沿用宿主设置。</p>
+        <p>酒红侧栏、铜色边框与独立回复卡片。明暗外观沿用宿主设置。</p>
       </header>
       <div>
         <div className="asuka-settings__preview-tabs" role="group" aria-label="预览场景">
@@ -93,7 +93,7 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
         <div className="asuka-settings__preview" style={previewStyle} data-preview-phase={previewPhase} data-preview-side={draft.side} data-preview-mode={draft.presentation} aria-label="当前草稿预览">
           {draft.background && draft.presentation === 'character' && <div className="asuka-settings__preview-scene" aria-hidden="true" />}
           {draft.presentation === 'character' ? <img src={artwork.front} alt="P01明日香立绘" style={{ objectFit: 'contain', height: `${Math.min(98, 82 * draft.artScale / 100)}%`, width: `${55 * draft.artScale / 100}%`, position: 'absolute', bottom: 0, [draft.side]: 0 }} /> : previewPhase === 'hero' ? <div style={{ display: 'grid', placeItems: 'center', height: '100%' }}><span className="asuka-brand-number">02</span></div> : null}
-          {previewPhase === 'active' && <div className="asuka-settings__preview-reading" aria-hidden="true">正文阅读区</div>}
+          {previewPhase === 'active' && <div className="asuka-settings__preview-reading" aria-hidden="true">独立回复卡片</div>}
         </div>
         <p className="asuka-settings__notice">此处为草稿示意，保存后才应用到工作区。会话中背景自动减弱，人物随实际留白显示。</p>
       </div>

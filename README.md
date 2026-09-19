@@ -1,25 +1,27 @@
 # 明日香 · P01 经典赛璐璐皮肤
 
-`dsh-skin-asuka-p01` 是 DeepSeek Harness 的独立皮肤组合包，采用 P01 经典赛璐璐人物、米白与日常红配色及公园日夜背景。面向桌面尺寸的 Harness Web 渲染界面，保留宿主会话、模型、工具与审批行为。
+`dsh-skin-asuka-p01` 是 DeepSeek Harness 的独立皮肤组合包，采用 P01 经典赛璐璐人物、酒红铜线界面、独立回复卡片及公园日夜背景。面向桌面尺寸的 Harness Web 渲染界面，保留宿主会话、模型、工具与审批行为。
 
-当前版本：`0.1.1`。已在官方 standalone `@deepseek-ai/dsh@0.1.5-rc.2` 的真实 Web 宿主中验证加载和主要设置行为。真实 Electron 桌面壳、`dsh-web-all` 与第三方皮肤管理器尚未实测；不能将 Web 验证等同于这些环境已兼容。
+当前版本：`0.2.0`。已在官方 standalone `@deepseek-ai/dsh@0.1.5-rc.2` 的真实 Web 宿主中验证加载和主要设置行为。真实 Electron 桌面壳、`dsh-web-all` 与第三方皮肤管理器尚未实测；不能将 Web 验证等同于这些环境已兼容。
 
-## 0.1.1 阅读体验优化
+## 0.2.0 酒红铜线主题
 
-- 正文面板采用实色背景、12px 圆角，默认左右32px、上下24px内边距；按实际会话列宽缩减至24px或16px。原生滚动区上下留白为24px。
-- 会话标题、页签及输入区底部统计使用实色底，避免文字直接压在背景图上。
-- 欢迎页保持用户设置的背景强度；会话背景自动使用其40%（默认55%对应22%），不改写已保存偏好。
-- 宽表格与长代码在阅读面板内横向滚动，宽表悬停不会改变高度。
-- 人物跟随正文、输入卡和底部容器尺寸重新避让，脚下与输入区保持16px间隙。
-- 设置页增加“欢迎页 / 会话阅读”草稿示意切换；切换预览不会保存或改变正在使用的界面。
+参考 maid-atelier 的侧栏装饰、分层人物、输入框边框与分块回复形式，采用本项目 P01 素材和原创 CSS 实现明日香版本。没有复制参考主题的女仆、宫殿、蕾丝或其他美术资源。
 
-已安装0.1.0时，停止对应 profile 后，用下面的安装命令添加 **0.1.1** 安装包，再重启并刷新客户端。新版本沿用现有 `asuka-p01` 设置。
+- 深酒红侧栏与会话标题栏，铜色内框、角色水印、明确的工作区和会话选中状态；收起侧栏自动简化。
+- 输入框使用红铜双描边和 `02` 标识；欢迎标题使用系统衬线字体，无外部字体或新增依赖。
+- 宽窗口欢迎页放大 P01 全身立绘，并在对侧显示同一人物的头像徽章。插画可在实色输入框后方延伸；会话中继续严格避让正文和底部输入区。
+- 每段助手 Markdown 回复拥有实色独立卡片，卡片间露出场景；用户气泡、系统与思考区域、操作信息分别保持可读底色。
+- 保留上一版24px上下、32px左右阅读留白，实际会话列变窄时左右缩至24px或16px；宽表与长代码在卡片内部横向滚动。
+- 会话背景仍使用用户设置强度的40%（默认55%对应22%），欢迎页使用原值；设置命名空间与保存数据不变。
+
+已有0.1.x版本时，停止对应 profile 后添加下面的 **0.2.0** 安装包，再重启并刷新客户端。现有角色/专注模式、背景、左右位置与大小设置继续保留。
 
 ## 功能
 
 - 跟随宿主浅色、深色和跟随系统设置，不另建明暗偏好。
 - 侧栏和空会话品牌位显示明日香头像；专注模式保留 `02` 标识。
-- 人物出现在会话内容的可用侧边留白中；留白不足时自动隐藏人物，让正文和输入保持可用。
+- 欢迎页突出人物与主题装饰；会话页人物仅使用内容侧边的可用留白，空间不足时隐藏。
 - 公园背景独立开关，支持人物左右位置、背景强度和人物大小。
 - 自有设置页使用宿主 Host 设置持久化，草稿仅在页内预览，保存后才应用全局。
 - 不改变模型人格、系统提示词、工具权限和审批决策；图片与样式随包交付，不依赖运行时图床。
@@ -43,13 +45,13 @@
 安装包文件为：
 
 ```text
-dist/dsh-skin-asuka-p01-0.1.1.tgz
+dist/dsh-skin-asuka-p01-0.2.0.tgz
 ```
 
 先停止准备安装的 Harness profile，然后执行：
 
 ```sh
-dsh plugin --profile web add "/绝对路径/dsh-skin-asuka-p01-0.1.1.tgz"
+dsh plugin --profile web add "/绝对路径/dsh-skin-asuka-p01-0.2.0.tgz"
 dsh web --no-open
 ```
 
@@ -135,7 +137,7 @@ mkdir -p dist
 npm pack --pack-destination dist
 ```
 
-`npm pack` 会自动执行 `prepack`，依次进行 TypeScript 检查与构建，生成 `dist/dsh-skin-asuka-p01-0.1.1.tgz`。如果只需要查看构建产物而暂不打包，可单独执行：
+`npm pack` 会自动执行 `prepack`，依次进行 TypeScript 检查与构建，生成 `dist/dsh-skin-asuka-p01-0.2.0.tgz`。如果只需要查看构建产物而暂不打包，可单独执行：
 
 ```sh
 npm run typecheck
@@ -152,7 +154,8 @@ src/preferences.ts        五项偏好、默认值与输入校验
 src/client/index.tsx      主题覆盖、品牌位与设置入口
 src/client/settings.tsx   草稿、预览、保存与冲突处理
 src/client/scene.ts       会话列人物/背景适配及资源清理
-src/client/theme.css      限定到本皮肤的颜色与样式
+src/client/theme.css      色板、人物场景、回复卡片与设置页
+src/client/chrome.css     侧栏、标题栏、输入框与装饰边框
 assets/source/            用户 P01 人物素材、派生素材及公园背景
 scripts/build.mjs         编码资源并输出 Host / Client 产物
 lib/                      已构建产物
@@ -184,3 +187,5 @@ npm 安装包只包含 manifest 的 `files` 清单所列运行产物和说明，
 ## 开发参考
 
 接入依据为 [Harness 插件开发文档](https://deepseek-harness.github.io/deepseek-harness/develop/basic/)；参考了 [Deep Whale 主题仓库](https://github.com/Small-tailqwq/dsh-deep-whale/blob/main/README.en.md) 的独立组合包、皮肤发现元数据与场景分层方式。本包未使用该仓库的人物或背景图片。
+
+参考主题：[maid-atelier](https://github.com/Small-tailqwq/dsh-deep-whale/tree/main/maid-atelier)。本轮沿用其视觉分层思路，代码与几何装饰为本项目实现。

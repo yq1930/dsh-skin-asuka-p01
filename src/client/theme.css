@@ -1,22 +1,28 @@
 /* P01 uses host color aliases and preserves host typography and task-state colors. */
 body[data-dsh-asuka-p01] {
+  --asuka-chrome: #23171c;
+  --asuka-chrome-raised: #3c202a;
+  --asuka-chrome-text: #fff1de;
+  --asuka-chrome-muted: #d7bbaa;
+  --asuka-copper: #bd9060;
+  --asuka-ruby: #a83337;
   --asuka-reading-background-factor: 0.4;
   --asuka-reading-inline: 32px;
-  --asuka-base: #eae9df;
-  --asuka-panel: #f7f3ea;
-  --asuka-raised: #e8e9df;
-  --asuka-overlay: #fffdf7;
-  --asuka-code: #ecede3;
-  --asuka-text: #252c2d;
-  --asuka-secondary: #526850;
-  --asuka-muted: #637065;
-  --asuka-primary: #a9473b;
-  --asuka-primary-hover: #913d34;
+  --asuka-base: #eee7dd;
+  --asuka-panel: #fffaf2;
+  --asuka-raised: #f1e4d9;
+  --asuka-overlay: #fffdf9;
+  --asuka-code: #f3eade;
+  --asuka-text: #30272a;
+  --asuka-secondary: #705c56;
+  --asuka-muted: #79645e;
+  --asuka-primary: #a83337;
+  --asuka-primary-hover: #8b292d;
   --asuka-on-primary: #ffffff;
-  --asuka-link: #286685;
-  --asuka-border: #cbcdbf;
-  --asuka-control: #7a8c7d;
-  --asuka-selected: #f0ddd2;
+  --asuka-link: #88413e;
+  --asuka-border: #d7bd9f;
+  --asuka-control: #9d7e70;
+  --asuka-selected: #f3dad1;
   --asuka-error: #b33535;
   --asuka-notice: #895900;
 
@@ -66,18 +72,18 @@ body[data-dsh-asuka-p01] {
 }
 
 body[data-dsh-asuka-p01][data-ds-dark-theme] {
-  --asuka-base: #1d2222;
-  --asuka-panel: #252c2d;
-  --asuka-raised: #303838;
-  --asuka-overlay: #3b4544;
-  --asuka-code: #202626;
-  --asuka-text: #f7f3ea;
-  --asuka-secondary: #cbd1c8;
-  --asuka-muted: #adb9b3;
-  --asuka-link: #9accdc;
-  --asuka-border: #4d5a53;
-  --asuka-control: #85988b;
-  --asuka-selected: #443330;
+  --asuka-base: #1b181d;
+  --asuka-panel: #29232a;
+  --asuka-raised: #342c33;
+  --asuka-overlay: #42323b;
+  --asuka-code: #231e24;
+  --asuka-text: #f6eada;
+  --asuka-secondary: #e2cfc5;
+  --asuka-muted: #c9b6af;
+  --asuka-link: #ffc4a4;
+  --asuka-border: #68524e;
+  --asuka-control: #aa8474;
+  --asuka-selected: #4b2c33;
   --asuka-error: #ffada8;
   --asuka-notice: #f1c57a;
 }
@@ -145,6 +151,60 @@ body[data-dsh-asuka-p01] .asuka-stage__character {
   object-position: center bottom;
 }
 
+body[data-dsh-asuka-p01] .asuka-stage__frame {
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--asuka-copper);
+  opacity: 0.6;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__frame::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border: 1px solid color-mix(in srgb, var(--asuka-copper) 45%, transparent);
+  background:
+    linear-gradient(var(--asuka-ruby), var(--asuka-ruby)) left top / 32px 3px no-repeat,
+    linear-gradient(var(--asuka-ruby), var(--asuka-ruby)) right bottom / 32px 3px no-repeat;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__portrait {
+  display: none;
+  position: absolute;
+  left: var(--asuka-portrait-left);
+  top: var(--asuka-portrait-top);
+  width: var(--asuka-portrait-size);
+  color: var(--asuka-chrome-text);
+  text-align: center;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage[data-phase='hero'][data-portrait-visible='true'] .asuka-stage__portrait {
+  display: block;
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__portrait img {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  border: 1px solid var(--asuka-copper);
+  border-radius: 50%;
+  padding: 12px;
+  background: color-mix(in srgb, var(--asuka-panel) 86%, transparent);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--asuka-copper) 20%, transparent);
+}
+
+body[data-dsh-asuka-p01] .asuka-stage__portrait span {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 6px 13px;
+  border: 1px solid var(--asuka-copper);
+  background: var(--asuka-chrome);
+  font: 600 11px/1.2 ui-monospace, Menlo, monospace;
+  letter-spacing: 0.15em;
+}
+
 body[data-dsh-asuka-p01] .asuka-stage__mark {
   display: none;
   position: absolute;
@@ -182,13 +242,59 @@ body[data-dsh-asuka-p01] [data-asuka-density='narrow'] {
   --asuka-reading-inline: 16px;
 }
 
+/* The native message flow stays intact; each rendered reply owns its surface. */
 body[data-dsh-asuka-p01] [data-chat-flow] {
   box-sizing: border-box;
   min-width: 0;
+  padding: 0;
+  background: transparent;
+  --dsh-chat-flow-gap: 22px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow-kind='assistant-step']
+  > [data-slot='conversation.chat.node'] > div > div > div[class*='markdown'] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   padding: 24px var(--asuka-reading-inline);
   border: 1px solid var(--asuka-border);
-  border-radius: 12px;
-  background-color: var(--asuka-panel);
+  border-left: 3px solid var(--asuka-ruby);
+  border-radius: 14px 14px 14px 4px;
+  background: var(--asuka-panel);
+  box-shadow: 0 6px 24px rgb(35 23 28 / 7%);
+}
+
+body[data-dsh-asuka-p01] [class*='userRow'] > [class*='userStack'] > [class*='bubble']:not([role='tooltip']) {
+  padding: 14px 20px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 14px 14px 4px 14px;
+  color: var(--asuka-text);
+  background: var(--asuka-selected);
+}
+
+/* Metadata and process controls need their own plates between the replies. */
+body[data-dsh-asuka-p01] [data-chat-flow] :is(
+  [data-chat-flow-kind='system-prompt'], [data-chat-flow-kind='context'],
+  [data-chat-flow-kind='command'], [data-chat-flow-kind='turn-process'],
+  [data-chat-flow-kind='tool-call']
+) > [data-slot='conversation.chat.node'] > :not(:empty),
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think'] {
+  border-radius: 8px;
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-disclosure-row] {
+  border-radius: 7px;
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] :is([class*='metaRow'], [class*='referenceSummary']),
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='userRow'] > [class*='actions'],
+body[data-dsh-asuka-p01] [data-chat-flow] [data-turn-tail] > [class*='actions'] {
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 7px;
+  background: var(--asuka-panel);
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] > * {
@@ -249,6 +355,15 @@ body[data-dsh-asuka-p01] [data-phase='hero'] [class*='headline']:has(> [class*='
   border-radius: 8px;
   background-color: var(--asuka-panel);
   box-shadow: 0 0 0 6px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='heroWorkspaceRow'] {
+  align-self: center;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 12px;
+  background: var(--asuka-panel);
 }
 
 body[data-dsh-asuka-p01] :is([data-chat-flow], .asuka-settings) a[href] {

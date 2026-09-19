@@ -1,0 +1,232 @@
+/* P01 chrome: copper seams, a red field and the pilot's 02 insignia.
+   Decoration never changes the host's column geometry or overlay tier. */
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
+body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
+body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+  --dsw-specific-sidebar-fill: var(--asuka-chrome);
+  --dsw-alias-bg-base: var(--asuka-chrome);
+  --dsw-alias-bg-layer-1: var(--asuka-chrome);
+  --dsw-alias-bg-layer-2: var(--asuka-chrome-raised);
+  --dsw-alias-bg-layer-3: var(--asuka-chrome-raised);
+  --dsw-alias-label-primary: var(--asuka-chrome-text);
+  --dsw-alias-label-primary-bluish: var(--asuka-chrome-text);
+  --dsw-alias-label-primary-inverted: var(--asuka-chrome);
+  --dsw-alias-label-primary-dimmed: var(--asuka-chrome-muted);
+  --dsw-alias-label-secondary: var(--asuka-chrome-muted);
+  --dsw-alias-label-tertiary: var(--asuka-chrome-muted);
+  --dsw-alias-label-caption: var(--asuka-chrome-muted);
+  --dsw-alias-label-dimmed: var(--asuka-chrome-muted);
+  --dsw-alias-brand-text: var(--asuka-chrome-text);
+  --dsw-alias-border-l1: color-mix(in srgb, var(--asuka-copper) 35%, transparent);
+  --dsw-alias-border-l2: var(--asuka-copper);
+  --dsw-alias-interactive-bg-hover: var(--asuka-chrome-raised);
+  --dsw-alias-interactive-bg-hover-solid: var(--asuka-chrome-raised);
+  --dsw-alias-interactive-bg-active: var(--asuka-ruby);
+  --dsw-alias-button-elevated-fill: var(--asuka-chrome-raised);
+  --dsw-alias-button-floating-hover: var(--asuka-chrome-raised);
+  --dsw-specific-sidebar-nav-item-active-accent: var(--asuka-copper);
+  color: var(--asuka-chrome-text);
+  background-color: var(--asuka-chrome);
+}
+
+/* Fixed dialogs can live inside the sidebar instead of in a body portal. */
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'], [data-slot='conversation.session.header'])
+  :is([role='dialog'], [role='menu'], [data-cordis-panel]) {
+  --dsw-alias-bg-base: var(--asuka-base);
+  --dsw-alias-bg-layer-1: var(--asuka-panel);
+  --dsw-alias-bg-layer-2: var(--asuka-raised);
+  --dsw-alias-bg-layer-3: var(--asuka-overlay);
+  --dsw-alias-label-primary: var(--asuka-text);
+  --dsw-alias-label-primary-bluish: var(--asuka-link);
+  --dsw-alias-label-primary-inverted: var(--asuka-panel);
+  --dsw-alias-label-primary-dimmed: var(--asuka-secondary);
+  --dsw-alias-label-secondary: var(--asuka-secondary);
+  --dsw-alias-label-tertiary: var(--asuka-muted);
+  --dsw-alias-label-caption: var(--asuka-muted);
+  --dsw-alias-label-dimmed: var(--asuka-muted);
+  --dsw-alias-brand-text: var(--asuka-text);
+  --dsw-alias-border-l1: var(--asuka-border);
+  --dsw-alias-border-l2: var(--asuka-control);
+  --dsw-alias-interactive-bg-hover: var(--asuka-raised);
+  --dsw-alias-interactive-bg-hover-solid: var(--asuka-raised);
+  --dsw-alias-interactive-bg-active: var(--asuka-selected);
+  --dsw-alias-button-elevated-fill: var(--asuka-panel);
+  --dsw-alias-button-floating-hover: var(--asuka-raised);
+  color: var(--asuka-text);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) {
+  box-shadow: inset -1px 0 var(--asuka-copper), inset -4px 0 var(--asuka-chrome-raised);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow']) {
+  position: relative;
+  background-color: var(--asuka-chrome);
+  box-shadow: inset 5px 0 var(--asuka-chrome), inset 6px 0 color-mix(in srgb, var(--asuka-copper) 36%, transparent);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid color-mix(in srgb, var(--asuka-copper) 62%, transparent);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  bottom: 112px;
+  width: min(60%, 164px);
+  aspect-ratio: 1;
+  background: var(--asuka-portrait-art, none) center / contain no-repeat;
+  opacity: 0.065;
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
+  div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='logoRow'] {
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 65%, transparent), inset 0 0 0 4px var(--asuka-chrome-raised);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) [class*='logoRow'] [class*='brand'] > svg {
+  color: var(--asuka-chrome-text);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) button[class*='newSession'] {
+  color: var(--asuka-chrome-text);
+  background: var(--asuka-ruby);
+  border-color: var(--asuka-copper);
+  box-shadow: inset 0 0 0 3px var(--asuka-ruby), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 55%, transparent);
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button:has(> [data-slot='settings.trigger']) {
+  color: var(--asuka-chrome-text);
+  background-color: var(--asuka-chrome-raised);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 65%, transparent);
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow'] {
+  border-radius: 5px;
+  box-shadow: inset 0 -1px color-mix(in srgb, var(--asuka-copper) 20%, transparent);
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow']:has(> [class*='folderActive']) {
+  color: var(--asuka-chrome-text);
+  background-color: var(--asuka-chrome-raised);
+  box-shadow: inset 3px 0 var(--asuka-ruby), inset 0 0 0 1px var(--asuka-copper);
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='folderActive'] {
+  color: var(--asuka-copper);
+}
+
+body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [role='treeitem'][aria-selected='true'],
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) [class*='panelRow'][aria-current='page'] {
+  color: var(--asuka-chrome-text);
+  background-color: var(--asuka-ruby);
+  box-shadow: inset 3px 0 var(--asuka-copper), inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 50%, transparent);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
+  :is(button[class*='newSession'], [role='treeitem'], [class*='panelRow']):focus-visible,
+body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button:has(> [data-slot='settings.trigger']):focus-visible {
+  outline: 2px solid var(--asuka-chrome-text);
+  outline-offset: -3px;
+}
+
+/* Do not widen the native 56px collapsed rail or cover its expand affordance. */
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow'])::before,
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow'])::after,
+body[data-dsh-asuka-p01][data-asuka-mode='focus'] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
+  display: none;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow']) {
+  box-shadow: none;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[class*='collapsed']:has(> [class*='logoRow']) button[class*='newSession'] {
+  box-shadow: inset 0 0 0 1px var(--asuka-copper);
+}
+
+/* Color only the conversation's owning header; retain its native stacking. */
+body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
+body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+  background: var(--asuka-chrome);
+  box-shadow: inset 0 -1px var(--asuka-copper), inset 0 -4px var(--asuka-chrome-raised);
+}
+
+body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [role='tab'][aria-selected='true'] {
+  color: var(--asuka-chrome-text);
+}
+
+body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [role='tab'][aria-selected='true']::after {
+  background-color: var(--asuka-copper);
+}
+
+/* Two inset seams leave the text box, scroll height and overlay anchor intact.
+   ::after belongs to the host's no-workspace dashed affordance. */
+body[data-dsh-asuka-p01] [data-composer-card] {
+  box-shadow: 0 0 0 1px var(--asuka-copper), inset 0 0 0 3px var(--asuka-panel), inset 0 0 0 4px color-mix(in srgb, var(--asuka-ruby) 54%, transparent), 0 8px 22px #23171c14;
+}
+
+body[data-dsh-asuka-p01] [data-composer-card]::before {
+  content: '02';
+  position: absolute;
+  top: -10px;
+  left: calc(50% - 19px);
+  box-sizing: border-box;
+  width: 38px;
+  height: 20px;
+  border: 1px solid var(--asuka-copper);
+  border-radius: 3px;
+  background: var(--asuka-ruby);
+  color: var(--asuka-chrome-text);
+  font: 700 11px/18px ui-monospace, 'SF Mono', Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-align: center;
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] [data-composer-card]:focus-within {
+  outline: 2px solid color-mix(in srgb, var(--asuka-ruby) 70%, var(--asuka-copper));
+  outline-offset: 3px;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'] {
+  padding-block: 12px;
+  border-block: 1px solid color-mix(in srgb, var(--asuka-copper) 58%, transparent);
+  text-shadow: 0 1px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] > span:first-child {
+  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', Georgia, serif;
+  font-size: clamp(26px, 2.2vw, 34px);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewBadge'] {
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  border-color: var(--asuka-border);
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before,
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after,
+  body[data-dsh-asuka-p01] [data-composer-card]::before {
+    display: none;
+  }
+
+  body[data-dsh-asuka-p01] [data-composer-card],
+  body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) {
+    box-shadow: none;
+  }
+}

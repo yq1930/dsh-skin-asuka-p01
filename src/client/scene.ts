@@ -55,6 +55,8 @@ export function installScene() {
   stage.append(background, character, mark)
   let prefs: AsukaPreferences | undefined
   let column: HTMLElement | null = null
+  let columnAttributes: ReturnType<typeof attributes> | undefined
+  const resizeTargets = new Set<HTMLElement>()
   let stopped = false
   let frame = 0
   let failedImage = false
@@ -69,20 +71,39 @@ export function installScene() {
     const next = document.querySelector<HTMLElement>(COLUMN)
     if (next !== column) {
       resize.disconnect()
+      resizeTargets.clear()
+      columnAttributes?.dispose()
+      columnAttributes = undefined
       column = next
       if (column) {
+        columnAttributes = attributes(column)
         column.prepend(stage)
-        resize.observe(column)
       } else stage.remove()
     } else if (column && stage.parentElement !== column) column.prepend(stage)
-    if (!column || !prefs) { stage.dataset.artVisible = 'false'; return }
+    if (!column) { stage.dataset.artVisible = 'false'; return }
+    const bounds = column.getBoundingClientRect()
+    columnAttributes?.set('data-asuka-density', bounds.width >= 1100 ? 'normal' : bounds.width >= 850 ? 'compact' : 'narrow')
     const host = [...column.querySelectorAll<HTMLElement>(PHASE)].find(el => el !== stage && !stage.contains(el))
+    const elements = host ? [...host.querySelectorAll<HTMLElement>(CONTENT)] : []
+    const seats = host ? [...host.querySelectorAll<HTMLElement>('[data-composer-seat]')] : []
+    // Input height and reading-panel width can change without resizing the column.
+    // Reconcile targets on every refresh so replaced conversation nodes are released.
+    const nextResizeTargets = new Set([column, ...elements, ...seats])
+    for (const element of resizeTargets) {
+      if (nextResizeTargets.has(element)) continue
+      resize.unobserve(element)
+      resizeTargets.delete(element)
+    }
+    for (const element of nextResizeTargets) {
+      if (resizeTargets.has(element)) continue
+      resize.observe(element)
+      resizeTargets.add(element)
+    }
     const phase = host?.dataset.phase
     stage.dataset.phase = phase === 'hero' ? 'hero' : phase === 'active' || phase === 'settling' ? 'active' : 'unknown'
     stage.dataset.artVisible = 'false'
-    if (prefs.presentation === 'focus' || !host || failedImage) return
-    const bounds = column.getBoundingClientRect()
-    const content = [...host.querySelectorAll<HTMLElement>(CONTENT)]
+    if (!prefs || prefs.presentation === 'focus' || !host || failedImage) return
+    const content = elements
       .map(el => el.getBoundingClientRect())
       .filter(r => r.width > 40 && r.height > 0 && r.right > bounds.left && r.left < bounds.right)
     // Unknown markup falls back to colors/avatar, without guessing over live controls.
@@ -92,11 +113,13 @@ export function installScene() {
     const space = prefs.side === 'left' ? leftEdge - bounds.left : bounds.right - rightEdge
     const lane = space - 36
     if (lane < 100) return
-    // The active composer has a full-column fade behind it. Keep the feet above
-    // that band as well as keeping the whole figure out of the text column.
-    const composer = host.querySelector<HTMLElement>('[data-composer-card]')?.getBoundingClientRect()
-    const bottom = phase !== 'hero' && composer && composer.height > 0
-      ? Math.max(0, bounds.bottom - composer.top + 12) : 0
+    // Active input/metadata now share an opaque seat. Keep the feet above its
+    // visible top, even when the input card itself is lower or grows taller.
+    const composerSurfaces = [...host.querySelectorAll<HTMLElement>('[data-composer-card], [data-composer-seat]')]
+      .map(el => el.getBoundingClientRect())
+      .filter(r => r.width > 0 && r.height > 0 && r.bottom > bounds.top && r.top < bounds.bottom)
+    const bottom = phase !== 'hero' && composerSurfaces.length
+      ? Math.max(0, bounds.bottom - Math.min(...composerSurfaces.map(r => r.top)) + 16) : 0
     const availableHeight = bounds.height - bottom - 28
     if (availableHeight < 220) return
     const width = Math.min(lane, 270 * prefs.artScale / 100)
@@ -137,6 +160,8 @@ export function installScene() {
       if (frame) cancelAnimationFrame(frame)
       mutations.disconnect()
       resize.disconnect()
+      resizeTargets.clear()
+      columnAttributes?.dispose()
       window.removeEventListener('resize', schedule)
       character.removeEventListener('load', onLoad)
       character.removeEventListener('error', onError)

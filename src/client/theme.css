@@ -1,5 +1,7 @@
-/* P01 uses host color aliases; layout, typography and task-state colors remain host-owned. */
+/* P01 uses host color aliases and preserves host typography and task-state colors. */
 body[data-dsh-asuka-p01] {
+  --asuka-reading-background-factor: 0.4;
+  --asuka-reading-inline: 32px;
   --asuka-base: #eae9df;
   --asuka-panel: #f7f3ea;
   --asuka-raised: #e8e9df;
@@ -118,6 +120,11 @@ body[data-dsh-asuka-p01] .asuka-stage__background {
   opacity: clamp(0, var(--asuka-scene-opacity, 0.18), 1);
 }
 
+/* Keep the saved strength for the welcome scene; quieten only the reading scene. */
+body[data-dsh-asuka-p01] .asuka-stage[data-phase='active'] .asuka-stage__background {
+  opacity: clamp(0, calc(var(--asuka-scene-opacity, 0.18) * var(--asuka-reading-background-factor)), 1);
+}
+
 body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-stage__background {
   background-image: var(--asuka-scene-night, none);
 }
@@ -162,14 +169,76 @@ body[data-dsh-asuka-p01][data-asuka-mode='focus'] .asuka-stage {
   display: none;
 }
 
-/* Opaque reading/input surfaces do not change the host's widths, spacing or text size. */
-body[data-dsh-asuka-p01] :is([data-chat-flow], [data-composer-card], [data-composer-input]) {
+/* Keep the host's column width, font scale, scrollport and sticky composer. */
+body[data-dsh-asuka-p01] :is([data-composer-card], [data-composer-input]) {
   background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-asuka-density='compact'] {
+  --asuka-reading-inline: 24px;
+}
+
+body[data-dsh-asuka-p01] [data-asuka-density='narrow'] {
+  --asuka-reading-inline: 16px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] {
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 24px var(--asuka-reading-inline);
+  border: 1px solid var(--asuka-border);
+  border-radius: 12px;
+  background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] > * {
+  min-width: 0;
+}
+
+/* Adjust the existing transcript insets, without introducing another scrollport. */
+body[data-dsh-asuka-p01] [data-conversation-scroll] :has(> [data-chat-flow]) {
+  padding-block: 24px;
+}
+
+/* Native session header seats: never target unrelated headers or dialog content. */
+body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
+body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+  background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-seat] {
+  background: var(--asuka-base);
+  border-top: 1px solid var(--asuka-border);
+}
+
+/* Wide tables normally break out into the full conversation width. Keep their
+   native horizontal scroller, but contain it inside the reading panel. */
+body[data-dsh-asuka-p01] [data-chat-flow] .md-table-wide {
+  --dsh-table-spare: 0px;
+  --dsh-table-lead: 0px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: 0;
+  padding-inline: 0;
+  /* The native hover-only scrollbar reserve must not remain with auto scrolling. */
+  padding-block-end: 0;
+  overflow-x: auto;
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] pre,
 body[data-dsh-asuka-p01] [data-terminal] {
   background-color: var(--asuka-code);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] pre {
+  --dsl-code-block-line-white-space: pre;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  word-break: normal;
 }
 
 /* Keep the native centered flex row and its height; the paint-only surround avoids moving the composer. */
@@ -283,6 +352,65 @@ body[data-dsh-asuka-p01] .asuka-settings__preview-scene {
   inset: 0;
   background: var(--asuka-preview-day) center / cover no-repeat;
   pointer-events: none;
+  opacity: var(--asuka-scene-opacity);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-phase='active'] .asuka-settings__preview-scene {
+  opacity: calc(var(--asuka-scene-opacity) * var(--asuka-reading-background-factor));
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs button {
+  padding: 6px 10px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  cursor: pointer;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs button[aria-pressed='true'] {
+  border-color: var(--asuka-primary);
+  color: var(--asuka-primary);
+  background: var(--asuka-selected);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-reading {
+  position: absolute;
+  top: 18%;
+  right: 7%;
+  bottom: 18%;
+  left: 44%;
+  padding: 12px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 6px;
+  background: var(--asuka-panel);
+  color: var(--asuka-secondary);
+  font-size: 11px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-side='right'] .asuka-settings__preview-reading {
+  right: 44%;
+  left: 7%;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-mode='focus'] .asuka-settings__preview-reading {
+  right: 10%;
+  left: 10%;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-reading::after {
+  content: '';
+  display: block;
+  height: 3px;
+  margin-top: 16px;
+  background: var(--asuka-border);
+  box-shadow: 0 10px var(--asuka-border), 0 20px var(--asuka-border);
 }
 
 body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-settings__preview-scene {

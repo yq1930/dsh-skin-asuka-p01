@@ -8,7 +8,7 @@ body[data-dsh-asuka-p01] {
   --asuka-ruby: #a83337;
   --asuka-reading-background-factor: 0.4;
   --asuka-reading-inline: 32px;
-  --asuka-base: #eee7dd;
+  --asuka-base: #e9edf2;
   --asuka-panel: #fffaf2;
   --asuka-raised: #f1e4d9;
   --asuka-overlay: #fffdf9;
@@ -72,11 +72,11 @@ body[data-dsh-asuka-p01] {
 }
 
 body[data-dsh-asuka-p01][data-ds-dark-theme] {
-  --asuka-base: #1b181d;
-  --asuka-panel: #29232a;
+  --asuka-base: #171b29;
+  --asuka-panel: #26232e;
   --asuka-raised: #342c33;
   --asuka-overlay: #42323b;
-  --asuka-code: #231e24;
+  --asuka-code: #1e202c;
   --asuka-text: #f6eada;
   --asuka-secondary: #e2cfc5;
   --asuka-muted: #c9b6af;

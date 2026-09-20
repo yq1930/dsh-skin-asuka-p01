@@ -56,11 +56,11 @@ export function apply(ctx: Context): void {
     const state = useSyncExternalStore(subscribe, getSnapshot)
     const show = state.status === 'ready' && state.value?.presentation === 'character'
     return show
-      ? <img className={`asuka-brand-image ${className ?? ''}`} src={artwork.portrait} alt="明日香 P01" width={size} height={size} draggable={false} />
-      : <span className={`asuka-brand-number ${className ?? ''}`} style={{ width: size, height: size, fontSize: Math.max(12, size * 0.58) }} aria-label="明日香 P01">02</span>
+      ? <img className={`asuka-brand-image ${className ?? ''}`} src={artwork.portrait} alt="明日香绯色天际" width={size} height={size} draggable={false} />
+      : <span className={`asuka-brand-number ${className ?? ''}`} style={{ width: size, height: size, fontSize: Math.max(12, size * 0.58) }} aria-label="明日香绯色天际">02</span>
   }
   function HeroMark() {
-    return <span className="asuka-hero-emblem" role="img" aria-label="明日香 P01"><span>02</span></span>
+    return <span className="asuka-hero-emblem" role="img" aria-label="明日香绯色天际"><span>02</span></span>
   }
   ctx.slots.inject('sidebar.brand.mark', () => ctx.slots.register({ name: 'sidebar.brand.mark', priority: -20 }, Mark))
   ctx.slots.inject('conversation.hero.brand.mark', () => ctx.slots.register({ name: 'conversation.hero.brand.mark', priority: -20 }, HeroMark))

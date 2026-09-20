@@ -1,7 +1,7 @@
 {
   "name": "dsh-skin-asuka-p01",
-  "version": "0.3.0",
-  "description": "明日香 P01 经典赛璐璐：DeepSeek Harness 桌面 Web 渲染端皮肤",
+  "version": "0.4.0",
+  "description": "明日香绯色天际：精绘双立绘与城市穹顶，DeepSeek Harness 桌面皮肤",
   "type": "module",
   "main": "./lib/index.js",
   "exports": {

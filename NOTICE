@@ -1,6 +1,6 @@
-明日香 · P01 经典赛璐璐皮肤
+明日香 · 绯色天际
 包名：dsh-skin-asuka-p01
-版本：0.3.0
+版本：0.4.0
 
 一、代码许可
 
@@ -10,22 +10,20 @@ React、Cordis、Harness 接口及其他第三方依赖保留各自的许可证�
 
 二、美术来源
 
-人物造型来自用户项目中保留的“P01-经典赛璐璐”方案及其派生素材。
-该方案依据用户提供的动画参考制作，不将他人主题作者的美术当作本包资产。
-公园日景和暮色背景沿用用户项目内的既有设计素材。
+0.4.0人物以用户提供的日系明日香插画为身份与画风参考重新生成，
+背景为本项目生成的城市玻璃穹顶场景。没有使用参考皮肤作者的女仆、
+宫殿图片或其他美术文件。
 
-源码中的对应文件：
-- assets/source/p01-sheet.png：P01 人物方案依据。
-- assets/source/asuka-front.png：原P01收手站姿，会话中作为主立绘。
-- assets/source/asuka-welcome.png：以P01为参考生成的迎接全身立绘。
-- assets/source/asuka-study.png：以P01为参考生成的阅读全身立绘。
-- assets/source/ribbon-crest.png：本轮生成的酒红宝石缎带装饰。
-- assets/source/asuka-portrait.png：同一 P01 人物的头像派生素材。
-- assets/source/park-day.png：公园日景背景。
-- assets/source/park-dusk.png：公园暮色背景。
+当前运行素材：
+- assets/source/asuka-luminous-left.png：白衣精绘立绘。
+- assets/source/asuka-luminous-right.png：绯红精绘立绘。
+- assets/source/asuka-luminous-portrait.png：与本轮人物一致的头像。
+- assets/source/atrium-day.png：暖阳城市穹顶大厅。
+- assets/source/atrium-night.png：同一空间的蓝调夜景。
+- assets/source/ribbon-crest.png：沿用0.3.0生成的酒红宝石缎带。
 
-构建将运行所需图片编码为 WebP 并内嵌到 lib/client.js。
-preview/ 下的界面预览同样包含上述美术内容。
+旧P01原图与早期派生素材仍保留在assets/source中，不再混入本轮运行画面。
+构建将运行图片编码为WebP并内嵌到lib/client.js，preview截图也含上述美术。
 
 三、素材与角色权利边界
 
@@ -44,4 +42,4 @@ DeepSeek、DeepSeek Harness 或其他第三方项目的官方背书。
 skin.json 仅用于可选皮肤管理器的发现元数据，不表示其作者或管理器
 项目为本包提供授权、背书或完整兼容保证。本包不含自定义管理器配置桥。
 
-本轮三张新增PNG使用Codex内置image_gen生成；源码ornaments.ts中的金饰SVG为本项目原创界面图形。
+本轮人物、头像和日夜场景使用Codex内置image_gen生成；源码ornaments.ts中的金饰SVG为本项目原创界面图形。

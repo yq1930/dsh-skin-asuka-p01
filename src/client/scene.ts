@@ -57,7 +57,7 @@ export function installScene() {
   companion.draggable = false
   const mark = document.createElement('span')
   mark.className = 'asuka-stage__mark'
-  mark.textContent = 'ASUKA / 02'
+  mark.textContent = 'ASUKA / SKYLINE'
   stage.append(background, frameArt, character, companion, mark)
   let prefs: AsukaPreferences | undefined
   let column: HTMLElement | null = null
@@ -111,8 +111,8 @@ export function installScene() {
     }
     const phase = host?.dataset.phase
     stage.dataset.phase = phase === 'hero' ? 'hero' : phase === 'active' || phase === 'settling' ? 'active' : 'unknown'
-    // Reading uses the narrower resting pose; welcome keeps its open gesture.
-    // Change the source only when the phase actually selects a different image.
+    // Phase aliases also support older asset sets with a separate reading pose.
+    // The current slim illustration is shared, so navigation does not swap styles.
     const reading = phase === 'active' || phase === 'settling'
     const nextCharacterSource = reading ? artwork.front : artwork.welcome
     if (host && nextCharacterSource !== characterSource) {

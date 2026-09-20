@@ -131,9 +131,9 @@ export function installScene() {
     const opposite = prefs.side === 'left' ? 'right' : 'left'
     const figures = [
       { prefix: 'art', side: prefs.side, aspect: reading ? artwork.frontAspect : artwork.welcomeAspect, loaded: characterLoaded,
-        visible: 'artVisible', heroHeight: 0.86 },
+        visible: 'artVisible', heroHeight: 0.80 },
       { prefix: 'companion', side: opposite, aspect: artwork.studyAspect, loaded: companionLoaded,
-        visible: 'companionVisible', heroHeight: 0.82 },
+        visible: 'companionVisible', heroHeight: 0.78 },
     ] as const
     const place = (figure: typeof figures[number], height: number, bottom: number, inset: number) => {
       const width = height * figure.aspect
@@ -157,6 +157,8 @@ export function installScene() {
       }
       return
     }
+    // A narrow reading column keeps its space for text rather than miniature figures.
+    if (reading && bounds.width < 900) return
     // Active input/metadata share an opaque seat. Keep both figures' feet above
     // its visible top, even when the input card itself is lower or grows taller.
     const composerSurfaces = [...host.querySelectorAll<HTMLElement>('[data-composer-card], [data-composer-seat]')]
@@ -177,11 +179,12 @@ export function installScene() {
       const height = Math.min(
         availableHeight,
         Math.min(lane, 270 * prefs.artScale / 100) / figure.aspect,
-        bounds.height * (phase === 'hero' ? figure.heroHeight : 0.76),
+        bounds.height * (phase === 'hero' ? figure.heroHeight : 0.5),
+        reading ? 420 * prefs.artScale / 100 : Infinity,
       )
       // A height-constrained narrow figure is independently hidden, without
       // suppressing the other pose when its lane can still accommodate it.
-      if (height * figure.aspect < 100) continue
+      if (height * figure.aspect < 100 || (reading && height < 280 * prefs.artScale / 100)) continue
       candidates.push({ figure, height })
     }
     let sharedHeight: number | undefined

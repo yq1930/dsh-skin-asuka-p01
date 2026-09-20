@@ -3,5 +3,7 @@
   "preview/dark.webp",
   "preview/settings.webp",
   "preview/active-light.webp",
-  "preview/active-dark.webp"
+  "preview/active-dark.webp",
+  "preview/diff-light.webp",
+  "preview/diff-dark.webp"
 ]

@@ -1,4 +1,4 @@
-/* P01 uses host color aliases and preserves host typography and task-state colors. */
+/* Scoped reading tokens follow the host font setting; task-state colors stay native. */
 body[data-dsh-asuka-p01] {
   --asuka-chrome: #23171c;
   --asuka-chrome-raised: #3c202a;
@@ -8,23 +8,31 @@ body[data-dsh-asuka-p01] {
   --asuka-ruby: #a83337;
   --asuka-reading-background-factor: 0.4;
   --asuka-reading-inline: 32px;
-  --asuka-base: #e9edf2;
-  --asuka-panel: #fffaf2;
+  --asuka-base: #f1ebe5;
+  --asuka-panel: #fffbf6;
   --asuka-raised: #f1e4d9;
   --asuka-overlay: #fffdf9;
-  --asuka-code: #f3eade;
+  --asuka-code: #f3ede4;
   --asuka-text: #30272a;
-  --asuka-secondary: #705c56;
-  --asuka-muted: #79645e;
+  --asuka-secondary: #6b5e58;
+  --asuka-muted: #6f6063;
+  --asuka-diff-add: #21633e;
+  --asuka-diff-delete: #a33339;
   --asuka-primary: #a83337;
   --asuka-primary-hover: #8b292d;
   --asuka-on-primary: #ffffff;
   --asuka-link: #88413e;
-  --asuka-border: #d7bd9f;
+  --asuka-border: #d8c1a6;
   --asuka-control: #9d7e70;
   --asuka-selected: #f3dad1;
   --asuka-error: #b33535;
   --asuka-notice: #895900;
+  --asuka-body-size: calc(var(--dsh-content-font-size, 14px) + 2px);
+  --asuka-process-size: calc(var(--dsh-content-font-size-secondary, 13px) + 1px);
+  --asuka-code-size: calc(14px + var(--dsh-content-font-delta, 0px));
+  --asuka-code-leading: calc(22px + var(--dsh-content-font-delta, 0px));
+  --asuka-meta-size: calc(12px + var(--dsh-content-font-delta-secondary, 0px));
+  --asuka-process-height: calc(36px + var(--dsh-content-font-delta, 0px));
 
   --dsw-alias-bg-base: var(--asuka-base);
   --dsw-alias-bg-layer-1: var(--asuka-panel);
@@ -80,6 +88,8 @@ body[data-dsh-asuka-p01][data-ds-dark-theme] {
   --asuka-text: #f6eada;
   --asuka-secondary: #e2cfc5;
   --asuka-muted: #c9b6af;
+  --asuka-diff-add: #8bd5a5;
+  --asuka-diff-delete: #ffada8;
   --asuka-link: #ffc4a4;
   --asuka-border: #68524e;
   --asuka-control: #aa8474;
@@ -95,8 +105,14 @@ body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol']) {
 
 body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
   :is([data-phase='hero'], [data-phase='active'], [data-phase='settling']):not(.asuka-stage) {
+  --dsh-chat-content-width: var(--dsh-chat-user-width, clamp(620px, calc(var(--dsh-conversation-column-width, 0px) * 0.66), 920px));
+  --dsh-composer-card-max-width: var(--dsh-chat-content-width);
   position: relative;
   background-color: transparent;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol']) [data-phase='hero']:not(.asuka-stage) {
+  --dsh-composer-card-max-width: min(var(--dsh-chat-content-width), 800px);
 }
 
 /* The client inserts this first and calculates an unused rectangle for its character. */
@@ -129,6 +145,8 @@ body[data-dsh-asuka-p01] .asuka-stage__background {
 /* Keep the saved strength for the welcome scene; quieten only the reading scene. */
 body[data-dsh-asuka-p01] .asuka-stage[data-phase='active'] .asuka-stage__background {
   opacity: clamp(0, calc(var(--asuka-scene-opacity, 0.18) * var(--asuka-reading-background-factor)), 1);
+  /* Preserve the architecture at the sides, with less contrast behind process rows. */
+  mask-image: linear-gradient(90deg, #000 0%, #0009 20%, #0005 36% 64%, #0009 80%, #000 100%);
 }
 
 body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-stage__background {
@@ -174,10 +192,10 @@ body[data-dsh-asuka-p01] .asuka-stage__frame {
   border: 1px solid #d3b67b;
   border-radius: 6px;
   background:
-    var(--asuka-corner-tl-art) left top / 94px 94px no-repeat,
-    var(--asuka-corner-tr-art) right top / 94px 94px no-repeat,
-    var(--asuka-corner-bl-art) left bottom / 94px 94px no-repeat,
-    var(--asuka-corner-br-art) right bottom / 94px 94px no-repeat,
+    var(--asuka-corner-tl-art) left top / 72px 72px no-repeat,
+    var(--asuka-corner-tr-art) right top / 72px 72px no-repeat,
+    var(--asuka-corner-bl-art) left bottom / 72px 72px no-repeat,
+    var(--asuka-corner-br-art) right bottom / 72px 72px no-repeat,
     var(--asuka-trim-art) left 27px / 100px 24px repeat-x,
     linear-gradient(180deg, #271019, #5b1d2b 45%, #32131e) top / 100% 28px no-repeat,
     linear-gradient(90deg, #b48547, #f3dfab 45%, #9c6b34) bottom / 100% 5px no-repeat;
@@ -224,9 +242,14 @@ body[data-dsh-asuka-p01][data-asuka-mode='focus'] .asuka-stage {
   display: none;
 }
 
-/* Keep the host's column width, font scale, scrollport and sticky composer. */
+/* Keep native scroll, width-dragging and input behavior. */
 body[data-dsh-asuka-p01] :is([data-composer-card], [data-composer-input]) {
   background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-composer-card] {
+  font-size: var(--asuka-body-size);
+  line-height: 1.75;
 }
 
 body[data-dsh-asuka-p01] [data-asuka-density='compact'] {
@@ -239,6 +262,13 @@ body[data-dsh-asuka-p01] [data-asuka-density='narrow'] {
 
 /* The native message flow stays intact; each rendered reply owns its surface. */
 body[data-dsh-asuka-p01] [data-chat-flow] {
+  --dsw-font-markdown-base: var(--asuka-body-size)/1.75 var(--dsw-font-family);
+  --dsw-font-markdown-base-strong: 600 var(--asuka-body-size)/1.75 var(--dsw-font-family);
+  --dsw-font-markdown-h1: 600 calc(24px + var(--dsh-content-font-delta, 0px))/1.4 var(--dsw-font-family);
+  --dsw-font-markdown-h2: 600 calc(20px + var(--dsh-content-font-delta, 0px))/1.4 var(--dsw-font-family);
+  --dsw-font-markdown-h3: 600 calc(18px + var(--dsh-content-font-delta, 0px))/1.5 var(--dsw-font-family);
+  --dsw-font-markdown-code-block: var(--asuka-code-size)/var(--asuka-code-leading) var(--ds-font-family-code);
+  --dsw-font-markdown-code-block-small: var(--asuka-code-size)/var(--asuka-code-leading) var(--ds-font-family-code);
   box-sizing: border-box;
   min-width: 0;
   padding: 0;
@@ -246,17 +276,42 @@ body[data-dsh-asuka-p01] [data-chat-flow] {
   --dsh-chat-flow-gap: 22px;
 }
 
+/* Consecutive process items are compact. Answers and turns retain their own gap.
+   Do not give hidden/until-found host rows a box, padding or display override. */
+body[data-dsh-asuka-p01] [data-chat-flow] > :is(
+  [data-chat-flow-kind='tool-call'], [data-chat-flow-kind='command'],
+  [data-chat-flow-kind='turn-process'],
+  [data-chat-flow-kind='assistant-step']:not(:has([class*='markdown']))
+):not([hidden]) + :is(
+  [data-chat-flow-kind='tool-call'], [data-chat-flow-kind='command'],
+  [data-chat-flow-kind='assistant-step']:not(:has([class*='markdown']))
+):not([hidden]) {
+  --dsh-chat-flow-gap: 8px;
+}
+
 body[data-dsh-asuka-p01] [data-chat-flow-kind='assistant-step']
   > [data-slot='conversation.chat.node'] > div > div > div[class*='markdown'] {
   box-sizing: border-box;
   width: 100%;
   min-width: 0;
-  padding: 24px var(--asuka-reading-inline);
+  padding: 20px var(--asuka-reading-inline);
   border: 1px solid var(--asuka-border);
   border-left: 3px solid var(--asuka-ruby);
   border-radius: 14px 14px 14px 4px;
   background: var(--asuka-panel);
   box-shadow: 0 6px 24px rgb(35 23 28 / 7%);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] :is(p, ul, ol) {
+  margin-block: 14px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] li > :is(p, ul, ol) {
+  margin-block: 6px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] :is(h1, h2, h3) {
+  margin-block: 24px 12px;
 }
 
 body[data-dsh-asuka-p01] [class*='userRow'] > [class*='userStack'] > [class*='bubble']:not([role='tooltip']) {
@@ -265,6 +320,8 @@ body[data-dsh-asuka-p01] [class*='userRow'] > [class*='userStack'] > [class*='bu
   border-radius: 14px 14px 4px 14px;
   color: var(--asuka-text);
   background: var(--asuka-selected);
+  font-size: var(--asuka-body-size);
+  line-height: 1.75;
 }
 
 /* Metadata and process controls need their own plates between the replies. */
@@ -279,8 +336,54 @@ body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think'] {
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] [data-disclosure-row] {
+  --dsh-content-font-size-secondary: var(--asuka-process-size);
+  box-sizing: border-box;
+  height: var(--asuka-process-height);
+  padding-inline: 12px;
   border-radius: 7px;
   background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think']:not([data-expanded]) {
+  height: var(--asuka-process-height);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-turn-process] {
+  height: var(--asuka-process-height);
+  margin-bottom: 0;
+  padding: 0 12px;
+  border-bottom: 0;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-turn-process] > [class*='label'] {
+  font-size: var(--asuka-process-size);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think'] [class*='thinkBody'] {
+  padding: 10px 16px 14px 34px;
+  color: var(--asuka-secondary);
+  font-size: var(--asuka-process-size);
+  line-height: 1.6;
+}
+
+/* The diff owns its semantic palette. Success/error colors elsewhere are untouched.
+   diffBody is the host tool renderer's wrapper, not a generated primitive hash. */
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] {
+  --dsw-alias-state-success-primary: var(--asuka-diff-add);
+  --dsw-alias-state-error-primary: var(--asuka-diff-delete);
+  --dsw-alias-label-tertiary: var(--asuka-secondary);
+  --dsl-diff-line-height: var(--asuka-code-leading);
+  min-width: 0;
+  margin: 4px 12px 12px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] > [class*='_body_'] {
+  padding: 16px 18px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] > [class*='_footer_'] {
+  padding: 0 18px 14px;
+  font-size: var(--asuka-meta-size);
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] :is([class*='metaRow'], [class*='referenceSummary']),
@@ -308,14 +411,13 @@ body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
 }
 
 body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-seat] {
-  background: var(--asuka-base);
-  border-top: 1px solid var(--asuka-border);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--asuka-base) 80%, var(--asuka-panel)), var(--asuka-base) 36px);
 }
 
 /* Reserve the crest's strip next to its card, after any native queue, goal,
    task or notice content. Seat-level padding would leave those rows exposed. */
 body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-card] {
-  margin-top: 52px;
+  margin-top: 36px;
 }
 
 /* Wide tables normally break out into the full conversation width. Keep their
@@ -337,6 +439,10 @@ body[data-dsh-asuka-p01] [data-chat-flow] .md-table-wide {
 body[data-dsh-asuka-p01] [data-chat-flow] pre,
 body[data-dsh-asuka-p01] [data-terminal] {
   background-color: var(--asuka-code);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-terminal] {
+  --dsl-terminal-line-height: var(--asuka-code-leading);
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] pre {
@@ -473,6 +579,7 @@ body[data-dsh-asuka-p01] .asuka-settings__preview-scene {
 
 body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-phase='active'] .asuka-settings__preview-scene {
   opacity: calc(var(--asuka-scene-opacity) * var(--asuka-reading-background-factor));
+  mask-image: linear-gradient(90deg, #000, #0005 36% 64%, #000);
 }
 
 body[data-dsh-asuka-p01] .asuka-settings__preview-tabs {
@@ -707,6 +814,8 @@ body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[d
     --asuka-selected: Canvas;
     --asuka-error: CanvasText;
     --asuka-notice: CanvasText;
+    --asuka-diff-add: CanvasText;
+    --asuka-diff-delete: CanvasText;
   }
 
   body[data-dsh-asuka-p01] .asuka-stage {
@@ -740,8 +849,8 @@ body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage)
 body[data-dsh-asuka-p01] .asuka-hero-emblem {
   display: grid;
   place-items: center;
-  width: 84px;
-  height: 84px;
+  width: 76px;
+  height: 76px;
   color: #ffe9b5;
   background: var(--asuka-medallion-art) center / contain no-repeat;
   font: 600 22px/1 Georgia, serif;
@@ -760,14 +869,14 @@ body[data-dsh-asuka-p01] .asuka-hero-emblem > span {
 }
 
 body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] {
-  padding: 10px 24px;
+  padding: 8px 20px;
   border-block: 1px solid var(--asuka-copper);
   background: var(--asuka-panel);
   box-shadow: 28px 0 25px -25px var(--asuka-panel), -28px 0 25px -25px var(--asuka-panel);
 }
 
 body[data-dsh-asuka-p01][data-asuka-mode] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
-  min-height: 170px;
+  min-height: 160px;
   justify-content: space-between;
 }
 

@@ -8,8 +8,7 @@ body[data-dsh-asuka-p01] {
   --asuka-ivory-button-ink: #512733;
 }
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
-body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
-body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
   --dsw-specific-sidebar-fill: var(--asuka-chrome);
   --dsw-alias-bg-base: var(--asuka-chrome);
   --dsw-alias-bg-layer-1: var(--asuka-chrome);
@@ -79,6 +78,12 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:n
   padding-top: 32px;
 }
 
+/* Native macOS chrome already reserves 52px. Do not add the Web-only inset. */
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
+  div:has(> [class*='logoRow']):has(> [class*='topStrip']) {
+  padding-top: 6px;
+}
+
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before {
   content: '';
   position: absolute;
@@ -90,6 +95,11 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:h
     var(--asuka-corner-bl-art, none) left bottom / 40px 40px no-repeat,
     var(--asuka-corner-br-art, none) right bottom / 40px 40px no-repeat;
   pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol'])
+  div:has(> [class*='logoRow']):has(> [class*='topStrip'])::before {
+  top: 44px;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
@@ -142,6 +152,32 @@ body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button:has(> [data-slot=
   border-radius: 8px;
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--asuka-copper) 80%, transparent);
   min-height: 40px;
+}
+
+/* 0.1.7 puts Settings inside the account / More launcher. Keep its avatar and
+   native menu behavior, and use semantic markers rather than its CSS hash. */
+body[data-dsh-asuka-p01] [data-slot='settings.launcher'] button[aria-haspopup='menu'] {
+  box-sizing: border-box;
+  color: var(--asuka-chrome-text);
+  background: var(--asuka-chrome-raised);
+  border: 1px solid color-mix(in srgb, var(--asuka-copper) 65%, transparent);
+  border-radius: 10px;
+  min-height: 40px;
+  padding-inline: 10px;
+}
+
+body[data-dsh-asuka-p01] [data-slot='settings.launcher'] button[aria-haspopup='menu']:hover {
+  background: var(--asuka-velvet-glow);
+}
+
+body[data-dsh-asuka-p01] [data-slot='settings.launcher'] button[aria-haspopup='menu']:focus-visible {
+  outline: 2px solid var(--asuka-chrome-text);
+  outline-offset: -3px;
+}
+
+body[data-dsh-asuka-p01] [data-slot='settings.launcher'] button[data-collapsed='true'] {
+  min-height: 36px;
+  padding: 0;
 }
 
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='footArea'] {
@@ -236,17 +272,21 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div[c
 }
 
 /* Color only the conversation's owning header; retain its native stacking. */
-body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
-body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
   background: radial-gradient(ellipse at 25% 0, var(--asuka-velvet-glow), transparent 70%), var(--asuka-chrome);
   box-shadow: inset 0 -1px var(--asuka-copper), inset 0 -3px var(--asuka-chrome-raised);
 }
 
-body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [role='tab'][aria-selected='true'] {
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]):is([class*='headerBlank'], [class*='headerSessionless']) {
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) [role='tab'][aria-selected='true'] {
   color: var(--asuka-chrome-text);
 }
 
-body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header [role='tab'][aria-selected='true']::after {
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) [role='tab'][aria-selected='true']::after {
   background-color: var(--asuka-copper);
 }
 
@@ -357,7 +397,7 @@ body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewB
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='footArea'],
   body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button,
   body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'],
-  body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+  body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
     background-image: none;
     box-shadow: none;
   }

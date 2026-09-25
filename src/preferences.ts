@@ -6,7 +6,8 @@ export interface AsukaPreferences {
   artScale: number
 }
 
-export const SETTINGS_NAMESPACE = 'asuka-p01'
+/** Config-form namespaces are Host entry ids, matching cordis.patch.yml. */
+export const SETTINGS_NAMESPACE = 'ui-skin-asuka-p01'
 
 export const DEFAULT_PREFERENCES: Readonly<AsukaPreferences> = Object.freeze({
   presentation: 'character',

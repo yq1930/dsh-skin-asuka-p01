@@ -11,11 +11,11 @@ import chromeCss from './chrome.css'
 import { ornamentCssVariables } from './ornaments.ts'
 import { createSettingsPage } from './settings.tsx'
 import { installScene } from './scene.ts'
-import { SETTINGS_NAMESPACE, decodePreferences, type AsukaPreferences } from '../preferences.ts'
+import { SETTINGS_NAMESPACE, type AsukaPreferences } from '../preferences.ts'
 
 const PACKAGE_NAME = 'dsh-skin-asuka-p01'
 export const name = 'ui-skin-asuka-p01-client'
-export const inject = ['slots', 'theme', 'settingsScope']
+export const inject = ['slots', 'theme', 'configForms']
 
 /** Derive the official token layer from the same literal palette as the scoped stylesheet. */
 function themeTokens() {
@@ -32,7 +32,7 @@ function themeTokens() {
 }
 
 export function apply(ctx: Context): void {
-  const scope = ctx.settingsScope.bind<AsukaPreferences>({ namespace: SETTINGS_NAMESPACE, decode: decodePreferences })
+  const scope = ctx.configForms.get<AsukaPreferences>(SETTINGS_NAMESPACE)
   const subscribe = (listener: () => void) => scope.subscribe(listener)
   const getSnapshot = () => scope.getSnapshot()
   ctx.effect(() => {

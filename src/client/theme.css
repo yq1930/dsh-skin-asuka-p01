@@ -27,7 +27,7 @@ body[data-dsh-asuka-p01] {
   --asuka-selected: #f3dad1;
   --asuka-error: #b33535;
   --asuka-notice: #895900;
-  --asuka-body-size: calc(var(--dsh-content-font-size, 14px) + 2px);
+  --asuka-body-size: var(--dsh-content-font-size, 16px);
   --asuka-process-size: calc(var(--dsh-content-font-size-secondary, 13px) + 1px);
   --asuka-code-size: calc(14px + var(--dsh-content-font-delta, 0px));
   --asuka-code-leading: calc(22px + var(--dsh-content-font-delta, 0px));
@@ -105,13 +105,19 @@ body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol']) {
 
 body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
   :is([data-phase='hero'], [data-phase='active'], [data-phase='settling']):not(.asuka-stage) {
-  --dsh-chat-content-width: var(--dsh-chat-user-width, clamp(620px, calc(var(--dsh-conversation-column-width, 0px) * 0.66), 920px));
-  --dsh-composer-card-max-width: var(--dsh-chat-content-width);
   position: relative;
   background-color: transparent;
 }
 
-body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol']) [data-phase='hero']:not(.asuka-stage) {
+/* 0.1.7 owns width tokens on the conversation body, below the phase root. */
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
+  [data-phase]:not(.asuka-stage) > [class*='_body'] {
+  --dsh-chat-content-width: var(--dsh-chat-user-width, clamp(620px, calc(var(--dsh-conversation-column-width, 0px) * 0.66), 920px));
+  --dsh-composer-card-max-width: var(--dsh-chat-content-width);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
+  [data-phase='hero']:not(.asuka-stage) > [class*='_body'] {
   --dsh-composer-card-max-width: min(var(--dsh-chat-content-width), 800px);
 }
 
@@ -276,6 +282,40 @@ body[data-dsh-asuka-p01] [data-chat-flow] {
   --dsh-chat-flow-gap: 22px;
 }
 
+/* New grouped process bodies also carry data-chat-flow. Keep their native
+   disclosure/scroll ownership and avoid treating them as a second transcript. */
+body[data-dsh-asuka-p01] [data-step-process-content][data-chat-flow] {
+  --dsh-chat-flow-gap: 8px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity] {
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  min-height: var(--asuka-process-height);
+  padding: 6px 12px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 10px;
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  font-size: var(--asuka-process-size);
+  line-height: 1.5;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity][aria-expanded='true'] {
+  margin-bottom: 8px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity]:hover {
+  color: var(--asuka-text);
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity]:focus-visible {
+  outline: 2px solid var(--asuka-link);
+  outline-offset: 2px;
+}
+
 /* Consecutive process items are compact. Answers and turns retain their own gap.
    Do not give hidden/until-found host rows a box, padding or display override. */
 body[data-dsh-asuka-p01] [data-chat-flow] > :is(
@@ -400,13 +440,12 @@ body[data-dsh-asuka-p01] [data-chat-flow] > * {
 }
 
 /* Adjust the existing transcript insets, without introducing another scrollport. */
-body[data-dsh-asuka-p01] [data-conversation-scroll] :has(> [data-chat-flow]) {
+body[data-dsh-asuka-p01] [data-conversation-scroll] :has(> [data-chat-flow]):not([data-step-process-body]) {
   padding-block: 24px;
 }
 
 /* Native session header seats: never target unrelated headers or dialog content. */
-body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) > header,
-body[data-dsh-asuka-p01] [data-slot='conversation.session.header'] > header {
+body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
   background-color: var(--asuka-panel);
 }
 
@@ -446,12 +485,10 @@ body[data-dsh-asuka-p01] [data-chat-flow] [data-terminal] {
 }
 
 body[data-dsh-asuka-p01] [data-chat-flow] pre {
-  --dsl-code-block-line-white-space: pre;
   min-width: 0;
   max-width: 100%;
   overflow-x: auto;
-  white-space: pre;
-  word-break: normal;
+  /* Whitespace belongs to the native 0.1.7 code-wrap toggle. */
 }
 
 /* Keep the native centered flex row and its height; the paint-only surround avoids moving the composer. */
@@ -701,13 +738,17 @@ body[data-dsh-asuka-p01] .asuka-settings__field :is(small, output) {
 }
 
 body[data-dsh-asuka-p01] .asuka-settings__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
-  padding-top: 18px;
+  padding-block: 12px;
   border-top: 1px solid var(--asuka-border);
+  background: var(--asuka-panel);
 }
 
 body[data-dsh-asuka-p01] .asuka-settings__actions button {

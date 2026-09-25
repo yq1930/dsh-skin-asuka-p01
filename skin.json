@@ -4,7 +4,7 @@
   "nameEn": "ASUKA · Scarlet Skyline",
   "author": "yequn",
   "tagline": "精绘双立绘、城市穹顶与通透日夜光影",
-  "description": "明日香绯色天际主题，设置入口为「设置 → 明日香 P01」。沿用宿主明暗模式，支持角色/专注、背景、位置、强度和大小设置。",
+  "description": "适配 Harness 0.1.7-rc.2 桌面渲染界面。入口为「账号/更多 → 设置 → 明日香 P01」，支持角色/专注、背景、位置、强度和大小设置。",
   "tags": ["anime", "asuka", "illustration", "city", "desktop"],
   "accent": "#A83337",
   "bodyAttr": "data-dsh-asuka-p01",

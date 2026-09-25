@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react'
-import type { SettingsScope } from '@deepseek-ai/dsh-client-ui-settings/client'
+import type { ConfigForm } from '@deepseek-ai/dsh-client-ui-settings/client'
 import { artwork } from 'asuka:art'
 import { DEFAULT_PREFERENCES, PREFERENCE_KEYS, samePreferences, decodePreferences, type AsukaPreferences } from '../preferences.ts'
 
-export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
+export function createSettingsPage(scope: ConfigForm<AsukaPreferences>) {
   const subscribe = (listener: () => void) => scope.subscribe(listener)
   const snapshot = () => scope.getSnapshot()
   return function AsukaSettings({ close }: { close: () => void }) {
@@ -59,11 +59,11 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
         const ops = reset
           ? PREFERENCE_KEYS.map(key => ({ op: 'unset' as const, path: [key] }))
           : PREFERENCE_KEYS.map(key => ({ op: 'set' as const, path: [key], value: target[key] }))
-        await scope.mutate(ops, revision)
+        const acceptedWrite = await scope.mutate(ops, revision)
         if (!alive.current) return
+        if (!acceptedWrite) throw new Error('宿主未接受本次修改，请重新载入有效设置后再试')
         const accepted = scope.getSnapshot()
         if (!accepted.value || accepted.status !== 'ready' || accepted.mode !== 'host') throw new Error('Host尚未返回可确认的持久化设置。')
-        // mutate() also resolves after a rejected Host write has recovered its snapshot.
         // Confirm the authoritative result before replacing the user's unsaved draft.
         const resetStillOverridden = reset && accepted.user !== null && typeof accepted.user === 'object'
           && PREFERENCE_KEYS.some(key => Object.prototype.hasOwnProperty.call(accepted.user, key))
@@ -84,7 +84,7 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
     return <section className="asuka-settings" aria-label="明日香 P01 主题设置">
       <header className="asuka-settings__header">
         <h2>明日香 · 绯色天际</h2>
-        <p>精绘双立绘、城市穹顶与日夜光影。明暗外观沿用宿主设置。</p>
+        <p>明暗外观与字号在「通用设置」中调整，主题选项在此保存。</p>
       </header>
       <div>
         <div className="asuka-settings__preview-tabs" role="group" aria-label="预览场景">
@@ -110,6 +110,7 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
         {(!ready || !initialized) && <p className="asuka-settings__notice" data-state="warning" role="status">{saved.status === 'loading' || (ready && !initialized) ? slow ? '设置仍在读取，请检查宿主连接；尚未应用人物。' : '正在读取宿主设置…' : '当前连接未提供此皮肤的可用设置，请确认Host与Client均已加载。'}</p>}
         {ready && initialized && !writable && <p className="asuka-settings__notice" data-state="warning">当前连接不支持持久化写入，请从本机桌面或本机Harness连接修改。</p>}
         {conflict && <p className="asuka-settings__notice" data-state="warning">设置已在其他窗口改变，当前草稿仍保留。请重新载入再修改。</p>}
+      </div>
         <p className="asuka-settings__status" data-state={error ? 'error' : undefined} role={error ? 'alert' : 'status'}>{message || (dirty ? '有未保存的修改' : ready ? '与已保存设置一致' : '')}</p>
         <div className="asuka-settings__actions">
           <button type="button" disabled={!ready || saving} onClick={reloadDraft}>重新载入</button>
@@ -117,8 +118,7 @@ export function createSettingsPage(scope: SettingsScope<AsukaPreferences>) {
           <button type="button" onClick={close}>关闭</button>
           <button type="button" className="primary" disabled={!writable || !dirty || saving || conflict} onClick={() => void save()}>{saving ? '保存中…' : '保存'}</button>
         </div>
-        <p className="asuka-settings__notice">保存在当前Harness的Host设置中；不更改模型、工具权限和审批规则。</p>
-      </div>
+        <p className="asuka-settings__notice">保存后应用到当前配置，使用同一配置的其他窗口也会同步。</p>
     </section>
   }
 }

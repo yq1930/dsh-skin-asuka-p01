@@ -2,7 +2,13 @@
 
 `dsh-skin-asuka-p01` 为 DeepSeek Harness 提供精绘双人物、城市穹顶日夜场景、酒红金饰框架和清晰的阅读卡片。
 
-当前版本 **0.5.1**，面向 **DeepSeek Harness 0.1.7-rc.2** 的桌面渲染界面。本包声明了该宿主版本的兼容范围；0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+当前版本 **0.6.0**，声明兼容 **DeepSeek Harness 0.1.7-rc.2 ～ 0.2.x**（桌面端当前运行时为 **0.2.0-rc.2**）。0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+
+## 0.6.0 兼容声明对齐桌面端
+
+此前 `peerDependencies` 把 `@deepseek-ai/dsh` 钉死在 `0.1.7-rc.2`。DSH 在加载插件前，会把每个 DSH peer 声明与运行时版本逐一比对（`satisfies(runtimeVersion, range, { includePrerelease: true })`），不匹配就拒绝加载，必须由用户在插件页逐版本确认豁免；而**豁免不随插件升级继承**，于是每次发版都要重新确认一次。
+
+本次把声明改为范围 `>=0.1.7-rc.2 <0.3.0`，同时覆盖开发基线 `0.1.7-rc.2` 与桌面端当前运行时 `0.2.0-rc.2`，安装后无需再逐版本确认。开发依赖（`@deepseek-ai/dsh-settings`、`@deepseek-ai/dsh-client-ui-*`）一并升到 `0.2.0-rc.2`，类型检查与构建直接对着桌面端运行时进行 —— 本次 `tsc --noEmit` 无报错，插件代码无需改动。
 
 ## 0.5.1 间距修复
 
@@ -25,16 +31,16 @@
 
 ## 安装到桌面端
 
-1. 确认 DeepSeek Harness 的版本为 **0.1.7-rc.2**。
+1. 确认 DeepSeek Harness 版本落在声明范围内（**0.1.7-rc.2 ～ 0.2.x**，桌面端当前为 0.2.0-rc.2）。
 2. 打开侧栏 **插件 → 添加插件**。
-3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.5.1.tgz`。
+3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.6.0.tgz`。
 4. 完成安装，按界面提示选择 **立即启用**，随后重启应用以完整重新加载插件组合。
 5. 从左下角账号／**更多 → 设置 → 明日香 P01** 打开主题设置。
 
 本项目生成的安装包位于：
 
 ```text
-dist/dsh-skin-asuka-p01-0.5.1.tgz
+dist/dsh-skin-asuka-p01-0.6.0.tgz
 ```
 
 桌面端通过应用内插件页管理自身配置。安装包已经包含运行代码与图片，无需在插件目录中重新构建。
@@ -75,7 +81,7 @@ dist/dsh-skin-asuka-p01-0.5.1.tgz
 
 ## 验证范围
 
-验证使用安装在本机的 DeepSeek Harness **0.1.7-rc.2** 随附运行模块、独立测试配置和本地回环地址。
+验证使用安装在本机的 DeepSeek Harness 随附运行模块（**0.2.0-rc.2**）、独立测试配置和本地回环地址。
 
 - 旧包启动失败的复现与新包启动修复。
 - 五项主题设置的读取、保存、刷新恢复、跨窗口冲突保护、专注模式与恢复默认。
@@ -106,7 +112,7 @@ npm run build
 
 ```sh
 dsh --profile asuka-test --from-default-profile web --dump-config
-dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.5.1.tgz"
+dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.6.0.tgz"
 dsh --profile asuka-test --host 127.0.0.1 --no-open
 ```
 

@@ -2,7 +2,11 @@
 
 `dsh-skin-asuka-p01` 为 DeepSeek Harness 提供精绘双人物、城市穹顶日夜场景、酒红金饰框架和清晰的阅读卡片。
 
-当前版本 **0.5.0**，面向 **DeepSeek Harness 0.1.7-rc.2** 的桌面渲染界面。本包声明了该宿主版本的兼容范围；0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+当前版本 **0.5.1**，面向 **DeepSeek Harness 0.1.7-rc.2** 的桌面渲染界面。本包声明了该宿主版本的兼容范围；0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+
+## 0.5.1 间距修复
+
+消息尾部的元信息／操作底板此前只有背景和圆角、没有内边距，里面的图标与时间戳会直接顶到板的边缘（时间戳贴右边缘最明显）。本次给这类底板补上统一的四边内边距：上下 6px、左右 12px，与"过程活动"按钮的内边距一致，并把该刻度收敛为 `--asuka-plate-block` / `--asuka-plate-inline` 两个令牌，后续新增底板直接复用。
 
 ## 0.5.0 新版桌面适配
 
@@ -23,14 +27,14 @@
 
 1. 确认 DeepSeek Harness 的版本为 **0.1.7-rc.2**。
 2. 打开侧栏 **插件 → 添加插件**。
-3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.5.0.tgz`。
+3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.5.1.tgz`。
 4. 完成安装，按界面提示选择 **立即启用**，随后重启应用以完整重新加载插件组合。
 5. 从左下角账号／**更多 → 设置 → 明日香 P01** 打开主题设置。
 
 本项目生成的安装包位于：
 
 ```text
-dist/dsh-skin-asuka-p01-0.5.0.tgz
+dist/dsh-skin-asuka-p01-0.5.1.tgz
 ```
 
 桌面端通过应用内插件页管理自身配置。安装包已经包含运行代码与图片，无需在插件目录中重新构建。
@@ -102,7 +106,7 @@ npm run build
 
 ```sh
 dsh --profile asuka-test --from-default-profile web --dump-config
-dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.5.0.tgz"
+dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.5.1.tgz"
 dsh --profile asuka-test --host 127.0.0.1 --no-open
 ```
 

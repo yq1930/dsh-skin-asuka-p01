@@ -53,7 +53,6 @@ const plaque = uri(300, 68, `<g fill="none" stroke="url(#gold)">
 </g>`)
 
 export const ornamentCssVariables = [
-  `--asuka-corner-art:${corner(0)}`,
   `--asuka-corner-tl-art:${corner(0)}`,
   `--asuka-corner-tr-art:${corner(90)}`,
   `--asuka-corner-br-art:${corner(180)}`,

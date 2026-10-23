@@ -1,0 +1,65 @@
+/* Welcome page. Typography sits between two complete figures; text keeps an opaque
+   plate under its strokes. */
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'] {
+  position: relative;
+  padding: 16px 22px;
+  border-block: 1px solid color-mix(in srgb, var(--asuka-copper) 72%, transparent);
+  background-image: var(--asuka-plaque-art, none);
+  background-position: center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  text-shadow: 0 1px var(--asuka-panel);
+}
+
+/* The emblem headline stacks the medallion over the title instead of a small
+   app-like title chip. Keep the native centered row height. */
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline']:has(> [class*='fish']) {
+  flex-direction: column;
+  width: fit-content;
+  max-width: 100%;
+  align-self: center;
+  gap: 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] {
+  padding: 8px 20px;
+  border-block: 1px solid var(--asuka-copper);
+  background: var(--asuka-panel);
+  box-shadow: 28px 0 25px -25px var(--asuka-panel), -28px 0 25px -25px var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] > span:first-child {
+  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', Georgia, serif;
+  font-size: clamp(28px, 2vw, 32px);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewBadge'] {
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  border-color: var(--asuka-border);
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='heroWorkspaceRow'] {
+  align-self: center;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 12px;
+  background: var(--asuka-panel);
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'] {
+    background-image: none;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,231 @@
+/* Conversation reading surfaces. Native scroll, width-dragging and disclosure ownership stay with the host. */
+
+/* 0.1.7 owns width tokens on the conversation body, below the phase root. */
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
+  [data-phase]:not(.asuka-stage) > [class*='_body'] {
+  --dsh-chat-content-width: var(--dsh-chat-user-width, clamp(620px, calc(var(--dsh-conversation-column-width, 0px) * 0.66), 920px));
+  --dsh-composer-card-max-width: var(--dsh-chat-content-width);
+}
+
+body[data-dsh-asuka-p01] :is([data-pane='conversation'], [class*='centerCol'])
+  [data-phase='hero']:not(.asuka-stage) > [class*='_body'] {
+  --dsh-composer-card-max-width: min(var(--dsh-chat-content-width), 800px);
+}
+
+/* The native message flow stays intact; each rendered reply owns its surface. */
+body[data-dsh-asuka-p01] [data-chat-flow] {
+  --dsw-font-markdown-base: var(--asuka-body-size)/1.75 var(--dsw-font-family);
+  --dsw-font-markdown-base-strong: 600 var(--asuka-body-size)/1.75 var(--dsw-font-family);
+  --dsw-font-markdown-h1: 600 calc(24px + var(--dsh-content-font-delta, 0px))/1.4 var(--dsw-font-family);
+  --dsw-font-markdown-h2: 600 calc(20px + var(--dsh-content-font-delta, 0px))/1.4 var(--dsw-font-family);
+  --dsw-font-markdown-h3: 600 calc(18px + var(--dsh-content-font-delta, 0px))/1.5 var(--dsw-font-family);
+  --dsw-font-markdown-code-block: var(--asuka-code-size)/var(--asuka-code-leading) var(--ds-font-family-code);
+  --dsw-font-markdown-code-block-small: var(--asuka-code-size)/var(--asuka-code-leading) var(--ds-font-family-code);
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  --dsh-chat-flow-gap: 22px;
+}
+
+/* New grouped process bodies also carry data-chat-flow. Keep their native
+   disclosure/scroll ownership and avoid treating them as a second transcript. */
+body[data-dsh-asuka-p01] [data-step-process-content][data-chat-flow] {
+  --dsh-chat-flow-gap: 8px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity] {
+  box-sizing: border-box;
+  width: fit-content;
+  max-width: 100%;
+  min-height: var(--asuka-process-height);
+  padding: 6px 12px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 10px;
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  font-size: var(--asuka-process-size);
+  line-height: 1.5;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity][aria-expanded='true'] {
+  margin-bottom: 8px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity]:hover {
+  color: var(--asuka-text);
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-process-activity]:focus-visible {
+  outline: 2px solid var(--asuka-link);
+  outline-offset: 2px;
+}
+
+/* Consecutive process items are compact. Answers and turns retain their own gap.
+   Do not give hidden/until-found host rows a box, padding or display override. */
+body[data-dsh-asuka-p01] [data-chat-flow] > :is(
+  [data-chat-flow-kind='tool-call'], [data-chat-flow-kind='command'],
+  [data-chat-flow-kind='turn-process'],
+  [data-chat-flow-kind='assistant-step']:not(:has([class*='markdown']))
+):not([hidden]) + :is(
+  [data-chat-flow-kind='tool-call'], [data-chat-flow-kind='command'],
+  [data-chat-flow-kind='assistant-step']:not(:has([class*='markdown']))
+):not([hidden]) {
+  --dsh-chat-flow-gap: 8px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow-kind='assistant-step']
+  > [data-slot='conversation.chat.node'] > div > div > div[class*='markdown'] {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 20px var(--asuka-reading-inline);
+  border: 1px solid var(--asuka-border);
+  border-left: 3px solid var(--asuka-ruby);
+  border-radius: 14px 14px 14px 4px;
+  background: var(--asuka-panel);
+  box-shadow: 0 6px 24px rgb(35 23 28 / 7%);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] :is(p, ul, ol) {
+  margin-block: 14px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] li > :is(p, ul, ol) {
+  margin-block: 6px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='markdown'] :is(h1, h2, h3) {
+  margin-block: 24px 12px;
+}
+
+body[data-dsh-asuka-p01] [class*='userRow'] > [class*='userStack'] > [class*='bubble']:not([role='tooltip']) {
+  padding: 14px 20px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 14px 14px 4px 14px;
+  color: var(--asuka-text);
+  background: var(--asuka-selected);
+  font-size: var(--asuka-body-size);
+  line-height: 1.75;
+}
+
+/* Metadata and process controls need their own plates between the replies. */
+body[data-dsh-asuka-p01] [data-chat-flow] :is(
+  [data-chat-flow-kind='system-prompt'], [data-chat-flow-kind='context'],
+  [data-chat-flow-kind='command'], [data-chat-flow-kind='turn-process'],
+  [data-chat-flow-kind='tool-call']
+) > [data-slot='conversation.chat.node'] > :not(:empty),
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think'] {
+  border-radius: 8px;
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-disclosure-row] {
+  --dsh-content-font-size-secondary: var(--asuka-process-size);
+  box-sizing: border-box;
+  height: var(--asuka-process-height);
+  padding-inline: 12px;
+  border-radius: 7px;
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think']:not([data-expanded]) {
+  height: var(--asuka-process-height);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-turn-process] {
+  height: var(--asuka-process-height);
+  margin-bottom: 0;
+  padding: 0 12px;
+  border-bottom: 0;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] button[data-turn-process] > [class*='label'] {
+  font-size: var(--asuka-process-size);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-variant='think'] [class*='thinkBody'] {
+  padding: 10px 16px 14px 34px;
+  color: var(--asuka-secondary);
+  font-size: var(--asuka-process-size);
+  line-height: 1.6;
+}
+
+/* The diff owns its semantic palette. Success/error colors elsewhere are untouched.
+   diffBody is the host tool renderer's wrapper, not a generated primitive hash. */
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] {
+  --dsw-alias-state-success-primary: var(--asuka-diff-add);
+  --dsw-alias-state-error-primary: var(--asuka-diff-delete);
+  --dsw-alias-label-tertiary: var(--asuka-secondary);
+  --dsl-diff-line-height: var(--asuka-code-leading);
+  min-width: 0;
+  margin: 4px 12px 12px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] > [class*='_body_'] {
+  padding: 16px 18px;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='diffBody'] > [class*='_footer_'] {
+  padding: 0 18px 14px;
+  font-size: var(--asuka-meta-size);
+}
+
+/* Metadata and action plates paint a background, so they own an inset on all four
+   sides: without it the trailing timestamp renders flush against the plate edge. */
+body[data-dsh-asuka-p01] [data-chat-flow] :is([class*='metaRow'], [class*='referenceSummary']),
+body[data-dsh-asuka-p01] [data-chat-flow] [class*='userRow'] > [class*='actions'],
+body[data-dsh-asuka-p01] [data-chat-flow] [data-turn-tail] > [class*='actions'] {
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--asuka-plate-block) var(--asuka-plate-inline);
+  border-radius: 7px;
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] > * {
+  min-width: 0;
+}
+
+/* Adjust the existing transcript insets, without introducing another scrollport. */
+body[data-dsh-asuka-p01] [data-conversation-scroll] :has(> [data-chat-flow]):not([data-step-process-body]) {
+  padding-block: 24px;
+}
+
+/* Wide tables normally break out into the full conversation width. Keep their
+   native horizontal scroller, but contain it inside the reading panel. */
+body[data-dsh-asuka-p01] [data-chat-flow] .md-table-wide {
+  --dsh-table-spare: 0px;
+  --dsh-table-lead: 0px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: 0;
+  padding-inline: 0;
+  /* The native hover-only scrollbar reserve must not remain with auto scrolling. */
+  padding-block-end: 0;
+  overflow-x: auto;
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] pre,
+body[data-dsh-asuka-p01] [data-terminal] {
+  background-color: var(--asuka-code);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] [data-terminal] {
+  --dsl-terminal-line-height: var(--asuka-code-leading);
+}
+
+body[data-dsh-asuka-p01] [data-chat-flow] pre {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  /* Whitespace belongs to the native 0.1.7 code-wrap toggle. */
+}
+
+body[data-dsh-asuka-p01] :is([data-chat-flow], .asuka-settings) a[href] {
+  color: var(--asuka-link);
+  text-decoration-color: currentColor;
+}

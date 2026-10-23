@@ -1,0 +1,298 @@
+/* This layout belongs only to the theme's settings section (settings/). */
+body[data-dsh-asuka-p01] .asuka-settings {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 980px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(240px, 1fr);
+  gap: 24px;
+  color: var(--asuka-text);
+  background-color: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, select, input) {
+  box-sizing: border-box;
+  font: inherit;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header,
+body[data-dsh-asuka-p01] .asuka-settings__actions,
+body[data-dsh-asuka-p01] .asuka-settings__notice,
+body[data-dsh-asuka-p01] .asuka-settings__status {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header {
+  border-bottom: 1px solid var(--asuka-border);
+  padding-bottom: 18px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header :is(h1, h2, h3) {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__header p {
+  margin: 0;
+  color: var(--asuka-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Draft preview: scene, both figures and a reading card, scaled into one frame. */
+body[data-dsh-asuka-p01] .asuka-settings__preview {
+  position: relative;
+  display: block;
+  box-sizing: border-box;
+  align-self: start;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--asuka-border);
+  border-radius: 10px;
+  background-color: var(--asuka-raised);
+  overflow: hidden;
+}
+
+/* Each figure supplies its own width, height and side inline. */
+body[data-dsh-asuka-p01] .asuka-settings__preview > img {
+  position: absolute;
+  bottom: 4%;
+  display: block;
+  object-fit: contain;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-scene {
+  position: absolute;
+  inset: 0;
+  background: var(--asuka-scene-day) center / cover no-repeat;
+  pointer-events: none;
+  opacity: var(--asuka-scene-opacity);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-phase='active'] .asuka-settings__preview-scene {
+  opacity: calc(var(--asuka-scene-opacity) * var(--asuka-reading-background-factor));
+  mask-image: linear-gradient(90deg, #000, #0005 36% 64%, #000);
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-settings__preview-scene {
+  background-image: var(--asuka-scene-night);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-badge {
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs button {
+  padding: 6px 10px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  color: var(--asuka-secondary);
+  background: var(--asuka-panel);
+  cursor: pointer;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-tabs button[aria-pressed='true'] {
+  border-color: var(--asuka-primary);
+  color: var(--asuka-primary);
+  background: var(--asuka-selected);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-reading {
+  position: absolute;
+  top: 18%;
+  right: 26%;
+  bottom: 18%;
+  left: 26%;
+  padding: 12px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 6px;
+  background: var(--asuka-panel);
+  color: var(--asuka-secondary);
+  font-size: 11px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview[data-preview-mode='focus'] .asuka-settings__preview-reading {
+  right: 10%;
+  left: 10%;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__preview-reading::after {
+  content: '';
+  display: block;
+  height: 3px;
+  margin-top: 16px;
+  background: var(--asuka-border);
+  box-shadow: 0 10px var(--asuka-border), 0 20px var(--asuka-border);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__controls {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 9px;
+  min-width: 0;
+  color: var(--asuka-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field :is(select, input:not([type='checkbox']):not([type='range'])) {
+  width: 100%;
+  min-width: 0;
+  min-height: 36px;
+  padding: 7px 10px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  color: var(--asuka-text);
+  background: var(--asuka-overlay);
+  color-scheme: light;
+}
+
+body[data-dsh-asuka-p01][data-ds-dark-theme] .asuka-settings__field :is(select, input) {
+  color-scheme: dark;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field input[type='range'] {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  accent-color: var(--asuka-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  flex: 0 0 16px;
+  accent-color: var(--asuka-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field:has(> input[type='checkbox']) {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__field :is(small, output) {
+  color: var(--asuka-secondary);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-block: 12px;
+  border-top: 1px solid var(--asuka-border);
+  background: var(--asuka-panel);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button {
+  min-height: 36px;
+  padding: 7px 14px;
+  border: 1px solid var(--asuka-control);
+  border-radius: 6px;
+  background: var(--asuka-overlay);
+  color: var(--asuka-text);
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:hover:not(:disabled):not(.disabled):not([aria-disabled='true']) {
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:is(.primary, [data-variant='primary'], [type='submit']) {
+  border-color: var(--asuka-primary);
+  background: var(--asuka-primary);
+  color: var(--asuka-on-primary);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__actions button:is(.primary, [data-variant='primary'], [type='submit']):hover:not(:disabled):not(.disabled):not([aria-disabled='true']) {
+  background: var(--asuka-primary-hover);
+  border-color: var(--asuka-primary-hover);
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select, a):focus-visible {
+  outline: 2px solid var(--asuka-link);
+  outline-offset: 3px;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select):is(:disabled, .disabled, [aria-disabled='true']) {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status) {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--asuka-secondary);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+body[data-dsh-asuka-p01] .asuka-settings__notice {
+  padding: 11px 13px;
+  border: 1px solid var(--asuka-border);
+  border-radius: 6px;
+  background: var(--asuka-raised);
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[data-state='error'] {
+  color: var(--asuka-error);
+}
+
+body[data-dsh-asuka-p01] :is(.asuka-settings__notice, .asuka-settings__status)[data-state='warning'] {
+  color: var(--asuka-notice);
+}
+
+@media (max-width: 1100px) {
+  body[data-dsh-asuka-p01] .asuka-settings {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 20px;
+    gap: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body[data-dsh-asuka-p01] .asuka-settings,
+  body[data-dsh-asuka-p01] .asuka-settings * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] .asuka-settings :is(button, input, select):is(:disabled, .disabled, [aria-disabled='true']) {
+    color: GrayText;
+    border-color: GrayText;
+    opacity: 1;
+  }
+}

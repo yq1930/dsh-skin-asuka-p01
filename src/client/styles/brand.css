@@ -1,0 +1,56 @@
+/* Brand marks registered into the sidebar logo and welcome hero slots (brand.tsx). */
+
+body[data-dsh-asuka-p01] .asuka-brand-image,
+body[data-dsh-asuka-p01] .asuka-brand-number {
+  display: block;
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  border-radius: 5px;
+}
+
+body[data-dsh-asuka-p01] .asuka-brand-image {
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+body[data-dsh-asuka-p01] .asuka-brand-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--asuka-primary);
+  color: var(--asuka-on-primary);
+  font: 700 14px/1 ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+body[data-dsh-asuka-p01] .asuka-hero-emblem {
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  color: #ffe9b5;
+  background: var(--asuka-medallion-art) center / contain no-repeat;
+  font: 600 22px/1 Georgia, serif;
+  letter-spacing: 0.06em;
+  text-shadow: 0 1px 2px #361018;
+}
+
+body[data-dsh-asuka-p01] .asuka-hero-emblem > span {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 55px;
+  border: 1px solid #dfbd7b;
+  border-radius: 50%;
+  background: linear-gradient(150deg, #8e2f43, #35101d);
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] .asuka-hero-emblem {
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid CanvasText;
+    text-shadow: none;
+  }
+}

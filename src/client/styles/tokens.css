@@ -1,0 +1,27 @@
+/* Scoped reading tokens follow the host font setting; task-state colors stay native.
+   Palette colors and the host token aliases are generated from palette.ts. */
+body[data-dsh-asuka-p01] {
+  --asuka-reading-background-factor: 0.4;
+  --asuka-reading-inline: 32px;
+  --asuka-body-size: var(--dsh-content-font-size, 16px);
+  --asuka-process-size: calc(var(--dsh-content-font-size-secondary, 13px) + 1px);
+  --asuka-code-size: calc(14px + var(--dsh-content-font-delta, 0px));
+  --asuka-code-leading: calc(22px + var(--dsh-content-font-delta, 0px));
+  --asuka-meta-size: calc(12px + var(--dsh-content-font-delta-secondary, 0px));
+  --asuka-process-height: calc(36px + var(--dsh-content-font-delta, 0px));
+  /* One inset scale for every plate that paints its own background, so labels and
+     timestamps never sit flush against an edge. Matches the process activity row. */
+  --asuka-plate-block: 6px;
+  --asuka-plate-inline: 12px;
+  color: var(--asuka-text);
+  background-color: var(--asuka-base);
+}
+
+/* The client marks the conversation column's width class; reading insets follow it. */
+body[data-dsh-asuka-p01] [data-asuka-density='compact'] {
+  --asuka-reading-inline: 24px;
+}
+
+body[data-dsh-asuka-p01] [data-asuka-density='narrow'] {
+  --asuka-reading-inline: 16px;
+}

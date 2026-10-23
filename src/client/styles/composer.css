@@ -1,0 +1,87 @@
+/* Composer card: an ornamented frame around the native input. Keep native scroll,
+   width-dragging and input behavior. */
+body[data-dsh-asuka-p01] :is([data-composer-card], [data-composer-input]) {
+  background-color: var(--asuka-panel);
+}
+
+/* The crest sits above the text field in a reserved strip. ::after remains the
+   host's no-workspace affordance; no icon, hit target or text is repainted. */
+body[data-dsh-asuka-p01] [data-composer-card] {
+  --asuka-crest-width: 180px;
+  --asuka-crest-height: 56px;
+  --asuka-crest-top: -52px;
+  border-radius: 20px;
+  border-color: var(--asuka-copper);
+  padding-top: 26px;
+  background-image: var(--asuka-trim-art, none);
+  background-position: left 10px top 5px;
+  background-size: 72px 20px;
+  background-repeat: repeat-x;
+  box-shadow: 0 0 0 1px var(--asuka-copper), inset 0 0 0 3px var(--asuka-panel), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 60%, transparent), 0 6px 18px #23171c1a;
+  font-size: var(--asuka-body-size);
+  line-height: 1.75;
+}
+
+body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-seat] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--asuka-base) 80%, var(--asuka-panel)), var(--asuka-base) 36px);
+}
+
+/* Reading phases use a smaller crest. Its strip is reserved next to the card, after
+   any native queue, goal, task or notice content: seat-level padding would leave
+   those rows exposed. */
+body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-card] {
+  --asuka-crest-width: 136px;
+  --asuka-crest-height: 40px;
+  --asuka-crest-top: -36px;
+  margin-top: 36px;
+  padding-top: 20px;
+  background-size: 72px 14px;
+}
+
+body[data-dsh-asuka-p01] [data-composer-card]::before {
+  content: '';
+  position: absolute;
+  top: var(--asuka-crest-top);
+  left: calc(50% - var(--asuka-crest-width) / 2);
+  box-sizing: border-box;
+  width: var(--asuka-crest-width);
+  height: var(--asuka-crest-height);
+  background: var(--asuka-ribbon-art, var(--asuka-flourish-art, none)) center / contain no-repeat;
+  pointer-events: none;
+}
+
+body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+  min-height: 160px;
+  justify-content: space-between;
+  margin-top: 46px;
+}
+
+body[data-dsh-asuka-p01] [data-composer-card]:focus-within {
+  outline: 2px solid color-mix(in srgb, var(--asuka-ruby) 70%, var(--asuka-copper));
+  outline-offset: 3px;
+}
+
+@media (max-width: 1100px) {
+  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
+    --asuka-crest-width: 148px;
+    --asuka-crest-height: 46px;
+    --asuka-crest-top: -43px;
+    margin-top: 38px;
+  }
+}
+
+@media (forced-colors: active) {
+  body[data-dsh-asuka-p01] [data-composer-card]::before {
+    display: none;
+  }
+
+  body[data-dsh-asuka-p01] [data-composer-card] {
+    background-image: none;
+    box-shadow: none;
+  }
+
+  body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) [data-composer-card] {
+    margin-top: 0;
+    padding-top: 8px;
+  }
+}

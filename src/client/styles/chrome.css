@@ -1,12 +1,6 @@
-/* P01 salon: wine velvet, engraved champagne gold and ruby ribbon clasps.
-   Artwork decorates existing host surfaces; it never owns an overlay tier. */
-body[data-dsh-asuka-p01] {
-  --asuka-gold-light: #f4daa4;
-  --asuka-gold-shadow: #9a6b3c;
-  --asuka-velvet-glow: #592433;
-  --asuka-ivory-button: #fff5e4;
-  --asuka-ivory-button-ink: #512733;
-}
+/* P01 salon chrome for the sidebar and the session header: wine velvet, engraved
+   champagne gold and ruby ribbon clasps. Artwork decorates existing host surfaces;
+   it never owns an overlay tier. */
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
 body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
   --dsw-specific-sidebar-fill: var(--asuka-chrome);
@@ -65,6 +59,7 @@ body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) {
   box-shadow: inset -1px 0 var(--asuka-copper), inset -4px 0 var(--asuka-chrome-raised);
 }
 
+/* Sidebar frame: the column wrapping the logo row, navigation and foot area. */
 body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow']) {
   position: relative;
   background-color: var(--asuka-chrome);
@@ -290,85 +285,6 @@ body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) [role=
   background-color: var(--asuka-copper);
 }
 
-/* The crest sits above the text field in a reserved strip. ::after remains the
-   host's no-workspace affordance; no icon, hit target or text is repainted. */
-body[data-dsh-asuka-p01] [data-composer-card] {
-  --asuka-crest-width: 180px;
-  --asuka-crest-height: 56px;
-  --asuka-crest-top: -52px;
-  border-radius: 20px;
-  border-color: var(--asuka-copper);
-  padding-top: 26px;
-  background-image: var(--asuka-trim-art, none);
-  background-position: left 10px top 5px;
-  background-size: 72px 20px;
-  background-repeat: repeat-x;
-  box-shadow: 0 0 0 1px var(--asuka-copper), inset 0 0 0 3px var(--asuka-panel), inset 0 0 0 4px color-mix(in srgb, var(--asuka-copper) 60%, transparent), 0 6px 18px #23171c1a;
-}
-
-body[data-dsh-asuka-p01] :is([data-phase='active'], [data-phase='settling']) [data-composer-card] {
-  --asuka-crest-width: 136px;
-  --asuka-crest-height: 40px;
-  --asuka-crest-top: -36px;
-  padding-top: 20px;
-  background-size: 72px 14px;
-}
-
-body[data-dsh-asuka-p01] [data-composer-card]::before {
-  content: '';
-  position: absolute;
-  top: var(--asuka-crest-top);
-  left: calc(50% - var(--asuka-crest-width) / 2);
-  box-sizing: border-box;
-  width: var(--asuka-crest-width);
-  height: var(--asuka-crest-height);
-  background: var(--asuka-ribbon-art, var(--asuka-flourish-art, none)) center / contain no-repeat;
-  pointer-events: none;
-}
-
-body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
-  margin-top: 46px;
-}
-
-body[data-dsh-asuka-p01] [data-composer-card]:focus-within {
-  outline: 2px solid color-mix(in srgb, var(--asuka-ruby) 70%, var(--asuka-copper));
-  outline-offset: 3px;
-}
-
-body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'] {
-  position: relative;
-  padding: 16px 22px;
-  border-block: 1px solid color-mix(in srgb, var(--asuka-copper) 72%, transparent);
-  background-image: var(--asuka-plaque-art, none);
-  background-position: center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  text-shadow: 0 1px var(--asuka-panel);
-}
-
-body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='titleGroup'] > span:first-child {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', Georgia, serif;
-  font-size: clamp(28px, 2vw, 32px);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  line-height: 1.35;
-}
-
-body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewBadge'] {
-  color: var(--asuka-secondary);
-  background: var(--asuka-panel);
-  border-color: var(--asuka-border);
-}
-
-@media (max-width: 1100px) {
-  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [data-composer-card] {
-    --asuka-crest-width: 148px;
-    --asuka-crest-height: 46px;
-    --asuka-crest-top: -43px;
-    margin-top: 38px;
-  }
-}
-
 /* A short window gives the navigation space back to its content. */
 @media (max-height: 700px) {
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after {
@@ -376,34 +292,19 @@ body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='previewB
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  body[data-dsh-asuka-p01] [data-composer-card]::before {
-    animation: none;
-    transition: none;
-  }
-}
-
 @media (forced-colors: active) {
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::before,
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:has(> [class*='logoRow'])::after,
-  body[data-dsh-asuka-p01] [data-composer-card]::before,
   body[data-dsh-asuka-p01] [data-slot='sidebar.workspaces'] [class*='projectRow']::before {
     display: none;
   }
 
-  body[data-dsh-asuka-p01] [data-composer-card],
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']),
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) :is(div:has(> [class*='logoRow']), [class*='logoRow'], button[class*='newSession']),
   body[data-dsh-asuka-p01] :is([data-pane='sidebar'], [class*='sidebarCol']) div:not([class*='collapsed']):has(> [class*='logoRow']) > [class*='footArea'],
   body[data-dsh-asuka-p01] [data-slot='sidebar.settings'] button,
-  body[data-dsh-asuka-p01] [data-phase='hero']:not(.asuka-stage) [class*='headline'],
   body[data-dsh-asuka-p01] header:has(> [data-conversation-header-leading]) {
     background-image: none;
     box-shadow: none;
-  }
-
-  body[data-dsh-asuka-p01] [data-phase]:not(.asuka-stage) [data-composer-card] {
-    margin-top: 0;
-    padding-top: 8px;
   }
 }

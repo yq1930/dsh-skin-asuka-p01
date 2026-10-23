@@ -2,7 +2,19 @@
 
 `dsh-skin-asuka-p01` 为 DeepSeek Harness 提供精绘双人物、城市穹顶日夜场景、酒红金饰框架和清晰的阅读卡片。
 
-当前版本 **0.6.0**，声明兼容 **DeepSeek Harness 0.1.7-rc.2 ～ 0.2.x**（桌面端当前运行时为 **0.2.0-rc.2**）。0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+当前版本 **0.6.1**，声明兼容 **DeepSeek Harness 0.1.7-rc.2 ～ 0.2.x**（桌面端当前运行时为 **0.2.0-rc.2**）。0.1.5-rc.2 请继续使用旧的 0.4.1 构建产物。
+
+## 0.6.1 源码结构重构
+
+外观与行为不变，只调整源码组织，方便后续维护：
+
+- **配色单一来源**：浅色、深色与强制色配色集中在 `src/client/palette.ts`，样式变量和宿主令牌层都由它生成，不再在运行时用正则解析 CSS。
+- **样式按区域拆分**：原 `theme.css`／`chrome.css` 拆为 `src/client/styles/` 下的八个文件，删除被后续规则完全覆盖的旧声明和未使用的变量。
+- **人物布局独立**：避让与尺寸计算抽成纯函数 `scene/layout.ts`，DOM 挂载、观察者与清理留在 `scene/index.ts`。
+- **设置页拆分**：草稿、保存与冲突处理集中到 `settings/draft.ts`，预览和表单分开。
+- **偏好范围共用**：Host Schema、解码器与设置滑块共用同一组取值范围。
+
+重构前后在同版宿主中逐节点比对了欢迎页、会话页、账号菜单和主题设置页（浅深色、1024～1440px）的计算样式与布局，结果一致。
 
 ## 0.6.0 兼容声明对齐桌面端
 
@@ -33,14 +45,14 @@
 
 1. 确认 DeepSeek Harness 版本落在声明范围内（**0.1.7-rc.2 ～ 0.2.x**，桌面端当前为 0.2.0-rc.2）。
 2. 打开侧栏 **插件 → 添加插件**。
-3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.6.0.tgz`。
+3. 填入本机安装包的绝对路径，例如 `/绝对路径/dsh-skin-asuka-p01-0.6.1.tgz`。
 4. 完成安装，按界面提示选择 **立即启用**，随后重启应用以完整重新加载插件组合。
 5. 从左下角账号／**更多 → 设置 → 明日香 P01** 打开主题设置。
 
 本项目生成的安装包位于：
 
 ```text
-dist/dsh-skin-asuka-p01-0.6.0.tgz
+dist/dsh-skin-asuka-p01-0.6.1.tgz
 ```
 
 桌面端通过应用内插件页管理自身配置。安装包已经包含运行代码与图片，无需在插件目录中重新构建。
@@ -112,7 +124,7 @@ npm run build
 
 ```sh
 dsh --profile asuka-test --from-default-profile web --dump-config
-dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.6.0.tgz"
+dsh plugin --profile asuka-test add "/绝对路径/dsh-skin-asuka-p01-0.6.1.tgz"
 dsh --profile asuka-test --host 127.0.0.1 --no-open
 ```
 
@@ -121,12 +133,14 @@ dsh --profile asuka-test --host 127.0.0.1 --no-open
 | 文件 | 职责 |
 | --- | --- |
 | `src/index.ts` | Host Config schema与自定义设置页策略 |
-| `src/preferences.ts` | 配置条目id、五项偏好、默认值与校验 |
-| `src/client/index.tsx` | 主题、品牌插槽及configForms连接 |
-| `src/client/settings.tsx` | 草稿、预览、保存与冲突处理 |
-| `src/client/scene.ts` | 场景挂载、人物避让与清理 |
-| `src/client/theme.css` | 配色、阅读、代码差异及设置布局 |
-| `src/client/chrome.css` | 导航、账号入口、标题栏及装饰 |
+| `src/preferences.ts` | 配置条目id、五项偏好、默认值、取值范围与校验 |
+| `src/client/index.tsx` | 客户端入口：注入样式与令牌层、挂载场景、注册插槽 |
+| `src/client/palette.ts` | 浅深色与强制色配色，生成样式变量与宿主令牌层 |
+| `src/client/stylesheet.ts` | 按层叠顺序拼接样式文件与美术变量 |
+| `src/client/styles/` | 令牌、人物舞台、会话阅读、输入框、欢迎页、品牌标记、设置页、侧栏与标题栏样式 |
+| `src/client/scene/` | 场景挂载与清理（`index.ts`）、人物避让计算（`layout.ts`） |
+| `src/client/settings/` | 草稿与保存（`draft.ts`）、预览（`preview.tsx`）、设置页（`index.tsx`） |
+| `src/client/brand.tsx` | 侧栏头像与欢迎页徽章 |
 | `src/client/ornaments.ts` | 金属角花、边饰与铭牌 |
 | `scripts/build.mjs` | 编码图片并构建Host／Client产物 |
 

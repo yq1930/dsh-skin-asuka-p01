@@ -9,6 +9,14 @@ export interface Feedback {
 }
 
 /**
+ * Harness 0.1.7–0.2.0 snapshots also carry `mode`, and a `memory` form keeps writes
+ * process-local. 0.2.1 removed the field: every form writes through to the Host.
+ */
+function persistsToHost(snapshot: ConfigFormSnapshot<unknown>): boolean {
+  return (snapshot as { mode?: string }).mode !== 'memory'
+}
+
+/**
  * A local draft over the saved Host value. Edits stay local until saved; a newer
  * Host revision replaces a clean draft and marks a dirty one as conflicting.
  */
@@ -25,7 +33,7 @@ export function useSettingsDraft(form: ConfigForm<AsukaPreferences>, saved: Conf
   const dirty = reset || !samePreferences(draft, baseline)
   const ready = saved.status === 'ready' && !!saved.value
   const initialized = revision !== undefined
-  const writable = ready && initialized && saved.writable && saved.mode === 'host'
+  const writable = ready && initialized && saved.writable && persistsToHost(saved)
   const conflict = revision !== undefined && saved.revision !== revision && dirty && !saving
 
   const notify = (text: string, error = false) => setFeedback({ text, error })
@@ -74,7 +82,7 @@ export function useSettingsDraft(form: ConfigForm<AsukaPreferences>, saved: Conf
       if (!alive.current) return
       if (!acceptedWrite) throw new Error('宿主未接受本次修改，请重新载入有效设置后再试')
       const accepted = form.getSnapshot()
-      if (!accepted.value || accepted.status !== 'ready' || accepted.mode !== 'host') throw new Error('Host尚未返回可确认的持久化设置。')
+      if (!accepted.value || accepted.status !== 'ready' || !persistsToHost(accepted)) throw new Error('Host尚未返回可确认的持久化设置。')
       // Confirm the authoritative result before replacing the user's unsaved draft.
       const user = accepted.user
       const resetStillOverridden = reset && user !== null && typeof user === 'object'
